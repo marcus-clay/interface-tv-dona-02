@@ -3,14 +3,27 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { create } from 'zustand';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { 
-  Play, Pause, ArrowLeft, ChevronRight, Check, Monitor, 
-  Loader2, Home, Search, Film, Tv, User, Info, LogOut, 
-  Plus, Check as CheckIcon, Smartphone, Cast, WifiOff, Star, 
+import {
+  Play, Pause, ArrowLeft, ChevronRight, Check, Monitor,
+  Loader2, Home, Search, Film, Tv, User, Info, LogOut,
+  Plus, Check as CheckIcon, Smartphone, Cast, WifiOff, Star,
   Zap, ShieldCheck, CreditCard, Sparkles, X, Filter, Volume2, VolumeX, Maximize2,
   MessageCircle, ShoppingBag, Settings, Globe, ThumbsUp, Clapperboard, Share2,
   SkipForward, Rewind
 } from 'lucide-react';
+import {
+  Fire, FilmSlate, Moon, GlobeHemisphereWest, Trophy, Target,
+  Lightning, Medal, Heart, BookmarkSimple, Clock, TrendUp
+} from '@phosphor-icons/react';
+import DesignSystem from './DesignSystem';
+
+// Local images
+import coverCyberpunk from './images/cover cyberpunk.jpeg';
+import coverSuccession from './images/cover succession.jpg';
+import coverTLOU from './images/cover the last of us.webp';
+import donaSplashscreen from './images/dona_splashscreen_2x.webp';
+import donaLogoBanner from './images/dona_logo_banner_2x.webp';
+import donaLogoMacaron from './images/dona_logo_macaron_2x.webp';
 
 // --- CONFIGURATION ---
 const THEME = {
@@ -67,12 +80,72 @@ interface UserProfile {
 }
 
 // --- MOCK DATA ENRICHED ---
-const MOCK_CAST = [
-  { name: "Cillian Murphy", role: "J. Robert Oppenheimer", image: "https://image.tmdb.org/t/p/w200/3Ua1uX6135j1a6125b2a121.jpg" },
-  { name: "Emily Blunt", role: "Katherine Oppenheimer", image: "https://image.tmdb.org/t/p/w200/nPJXaRM7I1x51a1a121.jpg" },
-  { name: "Matt Damon", role: "Leslie Groves", image: "https://image.tmdb.org/t/p/w200/elSlNgV8xVfs121a12.jpg" },
-  { name: "Robert Downey Jr.", role: "Lewis Strauss", image: "https://image.tmdb.org/t/p/w200/5qHNjhtjMD4Yn1a121.jpg" },
+// Cast pour Oppenheimer
+const CAST_OPPENHEIMER = [
+  { name: "Cillian Murphy", role: "J. Robert Oppenheimer", image: "https://image.tmdb.org/t/p/w200/dm6V24NjjvjMiCtbMkc8Y2WPm2e.jpg" },
+  { name: "Emily Blunt", role: "Katherine Oppenheimer", image: "https://image.tmdb.org/t/p/w200/5nCSG5TL1bP1geD8aaBfaLnLLCD.jpg" },
+  { name: "Matt Damon", role: "Leslie Groves", image: "https://image.tmdb.org/t/p/w200/ehBCD4tpPPOCs0vPgESI6lYn0Q3.jpg" },
+  { name: "Robert Downey Jr.", role: "Lewis Strauss", image: "https://image.tmdb.org/t/p/w200/im9SAqJPZKEbVZGmjXuLI4O7RvM.jpg" },
 ];
+
+// Cast pour Dune 2
+const CAST_DUNE2 = [
+  { name: "Timothée Chalamet", role: "Paul Atreides", image: "https://image.tmdb.org/t/p/w200/BE2sdjpgsa2rNTFa66f7upkaOP.jpg" },
+  { name: "Zendaya", role: "Chani", image: "https://image.tmdb.org/t/p/w200/tylFh8XNKH2V1TgD7gXUDgwTTcN.jpg" },
+  { name: "Rebecca Ferguson", role: "Lady Jessica", image: "https://image.tmdb.org/t/p/w200/lJloTOheuQSirSLXNA3JHsrMNfH.jpg" },
+  { name: "Josh Brolin", role: "Gurney Halleck", image: "https://image.tmdb.org/t/p/w200/sX2etBbIkxRaCsATyw5ZpOVMPTD.jpg" },
+];
+
+// Cast pour Interstellar
+const CAST_INTERSTELLAR = [
+  { name: "Matthew McConaughey", role: "Cooper", image: "https://image.tmdb.org/t/p/w200/wJiGedOCZhwMx9DezY8uwbNxmAY.jpg" },
+  { name: "Anne Hathaway", role: "Dr. Brand", image: "https://image.tmdb.org/t/p/w200/s6tflSD93fGVWrIfjJEfKYxWrEY.jpg" },
+  { name: "Jessica Chastain", role: "Murph (adulte)", image: "https://image.tmdb.org/t/p/w200/lodMzLKSdrPcBry6TdoDsMN3Vge.jpg" },
+  { name: "Michael Caine", role: "Professeur Brand", image: "https://image.tmdb.org/t/p/w200/hZruclwEPCKw3e83rnFc5zpXRjK.jpg" },
+];
+
+// Cast pour Spider-Man: Across the Spider-Verse
+const CAST_SPIDERMAN = [
+  { name: "Shameik Moore", role: "Miles Morales (voix)", image: "https://image.tmdb.org/t/p/w200/fkOWzAK4V3seIQWlCXQULgQiP5R.jpg" },
+  { name: "Hailee Steinfeld", role: "Gwen Stacy (voix)", image: "https://image.tmdb.org/t/p/w200/dxSDWkiVaC6JYjrV3XRAZI7HOSS.jpg" },
+  { name: "Oscar Isaac", role: "Miguel O'Hara (voix)", image: "https://image.tmdb.org/t/p/w200/dW5U5yrIIPmMjRThR9KT2xH6nTz.jpg" },
+  { name: "Jake Johnson", role: "Peter B. Parker (voix)", image: "https://image.tmdb.org/t/p/w200/5BqNwjC7IvPgtkPABc25Kx7FWZR.jpg" },
+];
+
+// Cast pour The Last of Us
+const CAST_TLOU = [
+  { name: "Pedro Pascal", role: "Joel Miller", image: "https://image.tmdb.org/t/p/w200/9VYK7oxcqhjd5LAH6ZFJ3XzOlID.jpg" },
+  { name: "Bella Ramsey", role: "Ellie Williams", image: "https://image.tmdb.org/t/p/w200/xO0n6OXzSmgZ2U8ST15a4euGvS8.jpg" },
+  { name: "Anna Torv", role: "Tess", image: "https://image.tmdb.org/t/p/w200/yLKYFDwabUCRkp2IdTv2W0N5vf9.jpg" },
+  { name: "Nick Offerman", role: "Bill", image: "https://image.tmdb.org/t/p/w200/aFrryTfIKvbhhYFrgFrQjoTljKZ.jpg" },
+];
+
+// Cast pour Breaking Bad
+const CAST_BREAKING_BAD = [
+  { name: "Bryan Cranston", role: "Walter White", image: "https://image.tmdb.org/t/p/w200/7Jahy5LZX2Fo8fGJltMreAI49hC.jpg" },
+  { name: "Aaron Paul", role: "Jesse Pinkman", image: "https://image.tmdb.org/t/p/w200/u8UdsB9yenM4uHEjgcRAw3aLlMj.jpg" },
+  { name: "Anna Gunn", role: "Skyler White", image: "https://image.tmdb.org/t/p/w200/adppyeu1a4REN3khtgmXusrapFi.jpg" },
+  { name: "Dean Norris", role: "Hank Schrader", image: "https://image.tmdb.org/t/p/w200/yJcjMX2GccfBKmj6v3bVT4BfqW5.jpg" },
+];
+
+// Cast pour Cyberpunk Edgerunners
+const CAST_CYBERPUNK = [
+  { name: "Kenn", role: "David Martinez (voix JP)", image: "https://image.tmdb.org/t/p/w200/bJ5YUJcwz99I4QU5H1SHN0dPmEb.jpg" },
+  { name: "Aoi Yuki", role: "Lucy (voix JP)", image: "https://image.tmdb.org/t/p/w200/lGdXgGuxhdqRDWHuEn3rAoSvKqP.jpg" },
+  { name: "Zach Aguilar", role: "David Martinez (voix EN)", image: "https://image.tmdb.org/t/p/w200/nraZoTzwJQPHspAVsKfgl3RXKKa.jpg" },
+  { name: "Emi Lo", role: "Lucy (voix EN)", image: "https://image.tmdb.org/t/p/w200/yGeN8PmZzb2LTdgj2hYAPDVXpCq.jpg" },
+];
+
+// Cast pour Succession
+const CAST_SUCCESSION = [
+  { name: "Jeremy Strong", role: "Kendall Roy", image: "https://image.tmdb.org/t/p/w200/yA3mJBu77k8BNSo9z0DOpqTsL8D.jpg" },
+  { name: "Sarah Snook", role: "Siobhan Roy", image: "https://image.tmdb.org/t/p/w200/8Ak6eXKEeZpgNaoIpoQiMnT4B99.jpg" },
+  { name: "Kieran Culkin", role: "Roman Roy", image: "https://image.tmdb.org/t/p/w200/fVD8LbI5AMpY0qwlcSGZ7LhKXhN.jpg" },
+  { name: "Brian Cox", role: "Logan Roy", image: "https://image.tmdb.org/t/p/w200/6SlC0e9mDYxsW8bLfB1LovZw0KK.jpg" },
+];
+
+// Cast par défaut (Oppenheimer)
+const MOCK_CAST = CAST_OPPENHEIMER;
 
 const MOCK_REVIEWS = [
   { user: "Sarah L.", rating: 5, text: "Une claque visuelle et sonore absolue. Le meilleur film de l'année." },
@@ -90,10 +163,10 @@ const MOCK_CONTENT: ContentItem[] = [
   {
     id: 'oppenheimer', type: 'film', title: 'Oppenheimer', year: 2023, duration: '3h 00m', rating: 8.5,
     synopsis: "Le lieutenant-général Leslie Groves recrute le physicien J. Robert Oppenheimer pour travailler sur le projet top-secret Manhattan.",
-    poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", 
+    poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
     dominantColor: '#D86626', badges: ['4K', 'HDR', 'Atmos'], genres: ['Drame', 'Histoire'], match: 98,
-    director: "Christopher Nolan", studio: "Universal Pictures", cast: MOCK_CAST
+    director: "Christopher Nolan", studio: "Universal Pictures", cast: CAST_OPPENHEIMER
   },
   {
     id: 'dune2', type: 'film', title: 'Dune: Deuxième Partie', year: 2024, duration: '2h 46m', rating: 8.8,
@@ -101,7 +174,7 @@ const MOCK_CONTENT: ContentItem[] = [
     poster: "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg",
     dominantColor: '#C6823F', badges: ['4K', 'Dolby Vision', 'Atmos'], genres: ['Sci-Fi', 'Aventure'], match: 99,
-    director: "Denis Villeneuve", studio: "Warner Bros."
+    director: "Denis Villeneuve", studio: "Warner Bros.", cast: CAST_DUNE2
   },
   {
     id: 'interstellar', type: 'film', title: 'Interstellar', year: 2014, duration: '2h 49m', rating: 8.7,
@@ -109,42 +182,47 @@ const MOCK_CONTENT: ContentItem[] = [
     poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
     dominantColor: '#0B1026', badges: ['4K', 'HDR'], genres: ['Sci-Fi', 'Drame'], match: 95,
-    director: "Christopher Nolan"
+    director: "Christopher Nolan", cast: CAST_INTERSTELLAR
   },
   {
     id: 'spiderman', type: 'film', title: 'Spider-Man: Across the Spider-Verse', year: 2023, duration: '2h 20m', rating: 8.6,
     synopsis: "Miles Morales est catapulté à travers le Multivers, où il rencontre une équipe de Spider-People chargée de protéger son existence.",
     poster: "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",
-    dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Action'], match: 97
+    dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Action'], match: 97,
+    cast: CAST_SPIDERMAN
   },
   {
     id: 'tlou', type: 'series', title: 'The Last of Us', year: 2023, duration: '1 Saison', rating: 9.2,
     synopsis: "Quand le monde tel que vous le connaissiez n'existe plus, jusqu'où iriez-vous pour survivre ?",
-    poster: "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78Tw.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/b9UCfDzwiWw7mIFsIQR9ZJUeh7q.jpg",
-    dominantColor: '#2C3E50', badges: ['4K', 'HDR', 'Atmos'], genres: ['Action', 'Drame'], match: 99
+    poster: coverTLOU,
+    backdrop: coverTLOU,
+    dominantColor: '#2C3E50', badges: ['4K', 'HDR', 'Atmos'], genres: ['Action', 'Drame'], match: 99,
+    cast: CAST_TLOU
   },
   {
     id: 'breaking-bad', type: 'series', title: 'Breaking Bad', year: 2008, duration: '5 Saisons', rating: 9.5,
     synopsis: "Walter White, professeur de chimie, se lance dans le crime pour subvenir aux besoins de sa famille.",
     poster: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
     backdrop: "https://image.tmdb.org/t/p/original/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
-    dominantColor: '#1B4F25', badges: ['4K'], genres: ['Crime', 'Drame'], match: 98
+    dominantColor: '#1B4F25', badges: ['4K'], genres: ['Crime', 'Drame'], match: 98,
+    cast: CAST_BREAKING_BAD
   },
   {
     id: 'cyberpunk', type: 'series', title: 'Cyberpunk: Edgerunners', year: 2022, duration: '1 Saison', rating: 8.3,
     synopsis: "Dans une dystopie rongée par la corruption et les implants cybernétiques, un enfant des rues talentueux et impulsif tente de survivre.",
-    poster: "https://image.tmdb.org/t/p/w500/7jM0W3eJ21lZkH7D1w0M5K3j1K.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/2wM1bC1g1x1w1w1w1w1w1w1w1w.jpg",
-    dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Sci-Fi'], match: 94
+    poster: coverCyberpunk,
+    backdrop: coverCyberpunk,
+    dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Sci-Fi'], match: 94,
+    cast: CAST_CYBERPUNK
   },
   {
     id: 'succession', type: 'series', title: 'Succession', year: 2018, duration: '4 Saisons', rating: 8.9,
     synopsis: "La famille Roy, propriétaire d'un conglomérat médiatique mondial, se bat pour le contrôle de l'entreprise.",
-    poster: "https://image.tmdb.org/t/p/w500/7bG9Y7aB1e0s5q0s5q0s5q0s5.jpg", 
-    backdrop: "https://image.tmdb.org/t/p/original/k7sE3loF1BOJ47z70w9n6jW6L7.jpg",
-    dominantColor: '#1F2937', badges: ['4K', 'HDR'], genres: ['Drame', 'Comédie'], match: 96
+    poster: coverSuccession,
+    backdrop: coverSuccession,
+    dominantColor: '#1F2937', badges: ['4K', 'HDR'], genres: ['Drame', 'Comédie'], match: 96,
+    cast: CAST_SUCCESSION
   }
 ];
 
@@ -179,25 +257,87 @@ interface UserState {
   myList: string[];
   toggleMyList: (id: string) => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: () => void;
   logout: () => void;
+  finishLoading: () => void;
 }
 
 const useUserStore = create<UserState>((set) => ({
   myList: [],
   isAuthenticated: false,
+  isLoading: false,
   toggleMyList: (id) => set((state) => ({
     myList: state.myList.includes(id) ? state.myList.filter(item => item !== id) : [...state.myList, id]
   })),
   login: () => {
-    useRouterStore.getState().navigateTo('browse');
-    set({ isAuthenticated: true });
+    set({ isLoading: true });
+    // Simulate loading time for splashscreen
+    setTimeout(() => {
+      useRouterStore.getState().navigateTo('browse');
+      set({ isAuthenticated: true, isLoading: false });
+    }, 2500);
   },
   logout: () => {
     useRouterStore.getState().navigateTo('landing');
     set({ isAuthenticated: false });
   },
+  finishLoading: () => set({ isLoading: false }),
 }));
+
+// --- SPLASHSCREEN COMPONENT ---
+const Splashscreen = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center"
+    >
+      {/* Splashscreen Image */}
+      <motion.div
+        initial={{ scale: 1.1, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="absolute inset-0"
+      >
+        <img
+          src={donaSplashscreen}
+          alt="Dona"
+          className="w-full h-full object-cover"
+        />
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+      </motion.div>
+
+      {/* Loading indicator at bottom */}
+      <div className="absolute bottom-20 flex flex-col items-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="flex flex-col items-center gap-4"
+        >
+          {/* Loader */}
+          <div className="relative w-12 h-12">
+            <motion.div
+              className="absolute inset-0 border-2 border-white/10 rounded-full"
+            />
+            <motion.div
+              className="absolute inset-0 border-2 border-transparent border-t-[#F21C4C] rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+          <p className="text-white/50 text-sm font-medium tracking-wider uppercase">
+            Chargement de votre expérience...
+          </p>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
 
 // --- UI COMPONENTS ---
 
@@ -307,109 +447,214 @@ const PlayerTabButton = ({ active, children, onClick }: any) => (
 
 const PlayerOverlay = ({ content, onClose, isPaused, togglePlay }: any) => {
   const [activeTab, setActiveTab] = useState('info');
+  const [showOptIn, setShowOptIn] = useState(true);
+
+  // Suggested content when paused
+  const suggestedContent = MOCK_CONTENT.filter(c => c.id !== content.id).slice(0, 4);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="absolute inset-0 z-50 flex flex-col bg-black/90 backdrop-blur-md"
+      transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+      className="absolute inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-xl overflow-y-auto"
     >
       {/* Top Bar - Branding and Actions */}
-      <div className="flex justify-between items-center p-8 bg-gradient-to-b from-black/80 to-transparent">
+      <div className="flex justify-between items-center p-8 bg-gradient-to-b from-black/80 to-transparent sticky top-0 z-20">
         <div className="flex items-center gap-4">
           <button onClick={onClose} className="group flex items-center gap-3 text-white/70 hover:text-white transition-colors">
             <div className="bg-white/10 p-2 rounded-full group-hover:bg-white/20 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </div>
-            <span className="font-bold tracking-widest uppercase text-[12px]">LUMINA <span className="text-[#F21C4C]">PLAYER</span></span>
           </button>
-        </div>
-        
-        {/* Play/Pause Indicator (Subtle) */}
-        <div className="absolute left-1/2 -translate-x-1/2 bg-black/40 px-4 py-1 rounded-full backdrop-blur-sm border border-white/5">
-           <span className="text-xs font-bold tracking-[0.2em] text-[#F21C4C] uppercase flex items-center gap-2">
-             <Pause className="w-3 h-3 fill-current" /> EN PAUSE
-           </span>
+          <img src={donaLogoMacaron} alt="Dona" className="h-10 w-10 object-contain" />
         </div>
 
-        <div className="flex gap-4">
+        {/* Play/Pause Indicator - Apple style */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+          className="absolute left-1/2 -translate-x-1/2 bg-white/10 px-5 py-2 rounded-full backdrop-blur-md border border-white/10"
+        >
+           <span className="text-xs font-semibold tracking-wide text-white/80 uppercase flex items-center gap-2">
+             <Pause className="w-3 h-3" /> En pause
+           </span>
+        </motion.div>
+
+        <div className="flex gap-3">
            <button className="p-3 hover:bg-white/10 rounded-full transition-colors group relative">
-             <MessageCircle className="w-5 h-5 text-white/90" />
-             <span className="absolute -top-1 -right-1 bg-[#F21C4C] text-[8px] w-4 h-4 flex items-center justify-center rounded-full">3</span>
+             <MessageCircle className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+             <span className="absolute -top-1 -right-1 bg-[#FF375F] text-[8px] w-4 h-4 flex items-center justify-center rounded-full font-bold">3</span>
            </button>
-           <button className="p-3 hover:bg-white/10 rounded-full transition-colors"><Settings className="w-5 h-5 text-white/90" /></button>
+           <button className="p-3 hover:bg-white/10 rounded-full transition-colors">
+             <Settings className="w-5 h-5 text-white/70 hover:text-white transition-colors" />
+           </button>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col justify-center px-12 lg:px-24 relative max-w-7xl mx-auto w-full">
-        
-        {/* Title & Key Stats */}
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="mb-8"
+      <div className="flex-1 flex flex-col px-12 lg:px-24 relative max-w-7xl mx-auto w-full">
+
+        {/* Central Play Button - Apple TV style */}
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+          className="flex justify-center mb-12"
         >
-          <div className="flex items-center gap-2 mb-2">
-             <Badge className="bg-[#F21C4C] text-white border-transparent">EXCLUSIVITÉ</Badge>
-             {content.type === 'film' ? <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Film</span> : <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Série</span>}
+          <button
+            onClick={togglePlay}
+            className="group relative"
+          >
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-white/20 rounded-full blur-2xl scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            {/* Button */}
+            <div className="relative w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300 ease-out">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <Play className="w-10 h-10 text-white fill-white ml-1" />
+              </motion.div>
+            </div>
+          </button>
+        </motion.div>
+
+        {/* Title & Key Stats */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+          className="mb-10 text-center"
+        >
+          <div className="flex items-center justify-center gap-3 mb-3">
+             <Badge className="bg-white/10 text-white border-white/10">{content.type === 'film' ? 'Film' : 'Série'}</Badge>
+             {content.badges.slice(0, 2).map((b: string) => <Badge key={b} className="bg-white/5 text-white/70 border-white/5">{b}</Badge>)}
           </div>
-          <h1 className="text-6xl md:text-8xl font-black mb-4 tracking-tighter leading-[0.9] text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400">{content.title}</h1>
-          
-          <div className="flex items-center gap-6 text-white/60 text-xs font-medium uppercase tracking-wide">
-            <span className="text-white font-bold">{content.year}</span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 tracking-tight">{content.title}</h1>
+
+          <div className="flex items-center justify-center gap-4 text-white/50 text-sm">
+            <span>{content.year}</span>
             <span className="w-1 h-1 bg-white/30 rounded-full"/>
             <span>{content.duration}</span>
-            <span className="w-1 h-1 bg-white/30 rounded-full"/>
-            <div className="flex gap-2">
-               {content.badges.map((b: string) => <Badge key={b}>{b}</Badge>)}
-            </div>
-            <span className="w-1 h-1 bg-white/30 rounded-full"/>
-            {content.match && <span className="text-[#F21C4C] font-bold flex items-center gap-1"><ThumbsUp className="w-3 h-3" /> {content.match}% Match</span>}
+            {content.match && (
+              <>
+                <span className="w-1 h-1 bg-white/30 rounded-full"/>
+                <span className="text-[#30D158] font-medium">{content.match}% Match</span>
+              </>
+            )}
           </div>
         </motion.div>
 
+        {/* Promotional Nudge Banner */}
+        <AnimatePresence>
+          {showOptIn && (
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ delay: 0.4, duration: 0.4 }}
+              className="mb-10 relative"
+            >
+              <div className="bg-gradient-to-r from-[#5E5CE6]/20 via-[#1c1c1e] to-[#BF5AF2]/20 rounded-2xl p-6 border border-white/[0.08] relative overflow-hidden">
+                <button
+                  onClick={() => setShowOptIn(false)}
+                  className="absolute top-4 right-4 p-1 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-4 h-4 text-white/40" />
+                </button>
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#5E5CE6] to-[#BF5AF2] flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white mb-1">Passez à Dona+ pour une expérience sans pub</h3>
+                    <p className="text-sm text-white/50">Profitez de contenus exclusifs, 4K HDR et téléchargements illimités.</p>
+                  </div>
+                  <Button variant="glass" size="sm" className="flex-shrink-0">
+                    En savoir plus
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Navigation Tabs */}
-        <div className="flex border-b border-white/10 mb-8 w-full">
-          <PlayerTabButton active={activeTab === 'info'} onClick={() => setActiveTab('info')}>Infos</PlayerTabButton>
-          <PlayerTabButton active={activeTab === 'audio'} onClick={() => setActiveTab('audio')}>Audio & Sous-titres</PlayerTabButton>
-          <PlayerTabButton active={activeTab === 'reviews'} onClick={() => setActiveTab('reviews')}>Avis ({MOCK_REVIEWS.length})</PlayerTabButton>
-          <PlayerTabButton active={activeTab === 'shop'} onClick={() => setActiveTab('shop')}>
-             Boutique <span className="ml-2 w-2 h-2 rounded-full bg-[#F21C4C] inline-block animate-pulse shadow-[0_0_8px_#F21C4C]" />
-          </PlayerTabButton>
-        </div>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+          className="flex gap-2 mb-8 bg-white/5 p-1.5 rounded-xl w-fit"
+        >
+          {[
+            { id: 'info', label: 'Infos' },
+            { id: 'audio', label: 'Audio' },
+            { id: 'suggested', label: 'À suivre' },
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300",
+                activeTab === tab.id
+                  ? "bg-white text-black"
+                  : "text-white/60 hover:text-white hover:bg-white/5"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </motion.div>
 
         {/* Dynamic Panel Content */}
-        <div className="h-72 w-full"> {/* Fixed height for panel stability */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          className="flex-1 pb-8"
+        >
           <AnimatePresence mode="wait">
             {activeTab === 'info' && (
-              <motion.div 
+              <motion.div
                 key="info"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col lg:flex-row gap-16"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-10"
               >
-                <div className="flex-1 max-w-xl">
-                  <p className="text-lg text-white/80 leading-relaxed font-light mb-6">{content.synopsis}</p>
-                  <div className="grid grid-cols-2 gap-4 text-xs text-white/50 border-t border-white/10 pt-4">
-                     {content.director && <div><span className="text-white/30 uppercase tracking-wider block mb-1">De</span> <strong className="text-white text-sm">{content.director}</strong></div>}
-                     {content.studio && <div><span className="text-white/30 uppercase tracking-wider block mb-1">Studio</span> <strong className="text-white text-sm">{content.studio}</strong></div>}
-                     {content.genres && <div className="col-span-2"><span className="text-white/30 uppercase tracking-wider block mb-1">Genres</span> <strong className="text-white text-sm">{content.genres.join(', ')}</strong></div>}
+                <div>
+                  <p className="text-lg text-white/70 leading-relaxed mb-6">{content.synopsis}</p>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                     {content.director && (
+                       <div className="bg-white/5 rounded-xl p-4">
+                         <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">Réalisateur</span>
+                         <strong className="text-white">{content.director}</strong>
+                       </div>
+                     )}
+                     {content.studio && (
+                       <div className="bg-white/5 rounded-xl p-4">
+                         <span className="text-white/40 text-xs uppercase tracking-wider block mb-1">Studio</span>
+                         <strong className="text-white">{content.studio}</strong>
+                       </div>
+                     )}
                   </div>
                 </div>
-                
-                <div className="flex-1 border-l border-white/5 pl-12">
-                  <h4 className="text-xs font-bold uppercase text-white/30 mb-6 tracking-widest flex items-center gap-2"><Clapperboard className="w-3 h-3"/> Distribution</h4>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-6">
-                    {(content.cast || MOCK_CAST).map((actor: any, i: number) => (
-                      <div key={i} className="flex items-center gap-3 group cursor-pointer">
-                        <div className="relative">
-                          <img src={actor.image || "https://placehold.co/100x100"} className="w-12 h-12 rounded-full object-cover border-2 border-white/10 group-hover:border-[#F21C4C] transition-colors" alt={actor.name} />
-                          <div className="absolute inset-0 rounded-full bg-black/20 group-hover:bg-transparent transition-colors" />
-                        </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-white/40 mb-4 uppercase tracking-wide">Distribution</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    {(content.cast || MOCK_CAST).slice(0, 4).map((actor: any, i: number) => (
+                      <div key={i} className="flex items-center gap-3 bg-white/5 rounded-xl p-3 hover:bg-white/10 transition-colors cursor-pointer">
+                        <img src={actor.image} className="w-10 h-10 rounded-full object-cover" alt={actor.name} />
                         <div>
-                          <p className="text-sm font-bold text-white group-hover:text-[#F21C4C] transition-colors">{actor.name}</p>
-                          <p className="text-[10px] text-white/40 uppercase font-medium">{actor.role}</p>
+                          <p className="text-sm font-medium text-white">{actor.name}</p>
+                          <p className="text-xs text-white/40">{actor.role}</p>
                         </div>
                       </div>
                     ))}
@@ -419,29 +664,46 @@ const PlayerOverlay = ({ content, onClose, isPaused, togglePlay }: any) => {
             )}
 
             {activeTab === 'audio' && (
-              <motion.div 
+              <motion.div
                 key="audio"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="grid grid-cols-2 gap-20 max-w-3xl"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-3xl"
               >
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-white/30 mb-6 tracking-widest flex items-center gap-2"><Globe className="w-3 h-3" /> Audio</h4>
-                  <div className="space-y-3">
+                  <h4 className="text-sm font-semibold text-white/40 mb-4 uppercase tracking-wide flex items-center gap-2">
+                    <Volume2 className="w-4 h-4" /> Audio
+                  </h4>
+                  <div className="space-y-2">
                     {['Français (Original)', 'Anglais - Dolby Atmos', 'Espagnol', 'Allemand'].map((lang, i) => (
-                      <div key={lang} className={cn("flex items-center justify-between px-4 py-3 rounded-xl border cursor-pointer transition-all hover:scale-[1.02]", i === 0 ? "bg-[#F21C4C] border-[#F21C4C] shadow-lg shadow-[#F21C4C]/20" : "bg-white/5 border-white/5 hover:bg-white/10")}>
-                        <span className={cn("text-sm font-bold", i === 0 ? "text-white" : "text-white/80")}>{lang}</span>
-                        {i === 0 && <Check className="w-4 h-4 text-white" />}
+                      <div key={lang} className={cn(
+                        "flex items-center justify-between px-4 py-3.5 rounded-xl cursor-pointer transition-all",
+                        i === 0
+                          ? "bg-white text-black"
+                          : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white"
+                      )}>
+                        <span className="text-sm font-medium">{lang}</span>
+                        {i === 0 && <Check className="w-4 h-4" />}
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-white/30 mb-6 tracking-widest flex items-center gap-2"><MessageCircle className="w-3 h-3" /> Sous-titres</h4>
-                  <div className="space-y-3">
+                  <h4 className="text-sm font-semibold text-white/40 mb-4 uppercase tracking-wide flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" /> Sous-titres
+                  </h4>
+                  <div className="space-y-2">
                     {['Désactivé', 'Français', 'Anglais (CC)', 'Espagnol'].map((lang, i) => (
-                      <div key={lang} className={cn("flex items-center justify-between px-4 py-3 rounded-xl border cursor-pointer transition-all hover:scale-[1.02]", i === 1 ? "bg-white text-black border-white" : "bg-white/5 border-white/5 hover:bg-white/10")}>
-                        <span className={cn("text-sm font-bold", i === 1 ? "text-black" : "text-white/80")}>{lang}</span>
-                        {i === 1 && <Check className="w-4 h-4 text-black" />}
+                      <div key={lang} className={cn(
+                        "flex items-center justify-between px-4 py-3.5 rounded-xl cursor-pointer transition-all",
+                        i === 1
+                          ? "bg-white text-black"
+                          : "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white"
+                      )}>
+                        <span className="text-sm font-medium">{lang}</span>
+                        {i === 1 && <Check className="w-4 h-4" />}
                       </div>
                     ))}
                   </div>
@@ -449,142 +711,89 @@ const PlayerOverlay = ({ content, onClose, isPaused, togglePlay }: any) => {
               </motion.div>
             )}
 
-            {activeTab === 'reviews' && (
-              <motion.div 
-                key="reviews"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            {activeTab === 'suggested' && (
+              <motion.div
+                key="suggested"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6"
               >
-                {MOCK_REVIEWS.map((review, i) => (
-                  <div key={i} className="p-6 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors flex flex-col justify-between h-full group hover:-translate-y-1 duration-300">
-                    <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F21C4C] to-purple-600 flex items-center justify-center text-[10px] font-bold shadow-lg">
-                             {review.user.charAt(0)}
-                           </div>
-                           <span className="font-bold text-xs uppercase tracking-wide text-white/90">{review.user}</span>
-                        </div>
-                        <div className="flex text-[#F21C4C] gap-0.5 bg-black/30 px-2 py-1 rounded-full">
-                          {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-2.5 h-2.5 fill-current" />)}
-                        </div>
-                      </div>
-                      <p className="text-sm text-white/70 leading-relaxed italic relative">
-                        <span className="absolute -top-2 -left-1 text-2xl text-white/10 font-serif">"</span>
-                        {review.text}
-                        <span className="absolute bottom-0 ml-1 text-xl text-white/10 font-serif">"</span>
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
-                       <span className="text-[10px] text-white/30 font-mono">IL Y A 2J</span>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            )}
-
-            {activeTab === 'shop' && (
-              <motion.div 
-                key="shop"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="flex gap-12 items-center bg-gradient-to-br from-[#1a1a1a] to-black p-10 rounded-3xl border border-white/10 relative overflow-hidden shadow-2xl"
-              >
-                {/* Background Decor */}
-                <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#F21C4C] rounded-full blur-[120px] opacity-20 pointer-events-none" />
-                
-                <div className="flex-1 z-10 space-y-6">
-                  <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F21C4C]/20 text-[#F21C4C] text-[10px] font-bold uppercase tracking-widest rounded-full mb-4 border border-[#F21C4C]/20">
-                      <Sparkles className="w-3 h-3" /> Offre Spéciale
-                    </div>
-                    <h3 className="text-4xl font-black mb-2 text-white tracking-tight">La Collection Officielle</h3>
-                    <p className="text-white/60 max-w-md text-sm leading-relaxed">Replongez dans l'univers du film avec ces éditions limitées, disponibles uniquement pour les abonnés Dona+.</p>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <Button variant="primary" size="lg" className="shadow-lg shadow-[#F21C4C]/20 text-sm h-12 px-8">
-                      Accéder à la boutique
-                    </Button>
-                    <Button variant="outline" size="lg" className="text-sm h-12 px-6">
-                      En savoir plus
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="flex gap-6 z-10">
-                  {MOCK_PRODUCTS.map((product, idx) => (
-                    <div key={product.id} className="w-56 bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 hover:border-[#F21C4C]/50 hover:bg-white/10 cursor-pointer transition-all group hover:-translate-y-2 duration-300 shadow-xl">
-                      <div className="aspect-square bg-gradient-to-b from-white/10 to-transparent rounded-xl mb-4 overflow-hidden relative flex items-center justify-center group-hover:scale-105 transition-transform">
-                         <img src={product.image} className="w-32 h-32 object-contain drop-shadow-2xl" alt={product.name} />
-                         <div className="absolute top-2 right-2 bg-black/80 backdrop-blur text-white px-2 py-1 rounded-lg text-xs font-bold border border-white/10">{product.price}</div>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="font-bold text-sm text-white group-hover:text-[#F21C4C] transition-colors line-clamp-1">{product.name}</p>
-                        <div className="flex justify-between items-center">
-                          <p className="text-[10px] text-white/40 uppercase tracking-wider font-medium">Édition Limitée</p>
-                          <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform scale-0 group-hover:scale-100">
-                            <Plus className="w-3 h-3" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white/40 mb-4 uppercase tracking-wide">Si vous aimez {content.title}</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {suggestedContent.map((item, i) => (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="group cursor-pointer"
+                      >
+                        <div className="aspect-[2/3] rounded-xl overflow-hidden mb-3 relative">
+                          <img src={item.poster} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                              <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                            </div>
+                          </div>
+                          <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-md text-xs font-medium text-[#30D158]">
+                            {item.match}%
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                        <h5 className="font-medium text-sm text-white/90 group-hover:text-white transition-colors truncate">{item.title}</h5>
+                        <p className="text-xs text-white/40">{item.year} • {item.type === 'film' ? 'Film' : 'Série'}</p>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
 
       {/* Controls Bar - Timeline & Actions */}
-      <div className="px-10 pb-10 pt-4 bg-gradient-to-t from-black via-black/95 to-transparent">
+      <div className="px-10 pb-8 pt-4 bg-gradient-to-t from-black via-black/95 to-transparent sticky bottom-0">
          {/* Timeline */}
-         <div className="flex items-center gap-6 mb-8 text-xs font-mono text-white/50 tracking-widest">
-            <span className="w-12 text-right">34:12</span>
-            <div className="flex-1 h-1.5 bg-white/10 rounded-full relative group cursor-pointer hover:h-2 transition-all duration-300">
-               <div className="absolute left-0 top-0 h-full w-[34%] bg-gradient-to-r from-[#F21C4C] to-[#ff4d73] rounded-full shadow-[0_0_15px_rgba(242,28,76,0.5)]" />
-               {/* Buffer */}
-               <div className="absolute left-0 top-0 h-full w-[45%] bg-white/5 rounded-full -z-10" />
-               <div className="absolute left-[34%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.5)] scale-0 group-hover:scale-100 transition-transform flex items-center justify-center">
-                 <div className="w-1.5 h-1.5 bg-[#F21C4C] rounded-full" />
-               </div>
-               
-               {/* Chapter Markers */}
-               <div className="absolute left-[20%] top-0 h-full w-0.5 bg-black/50" />
-               <div className="absolute left-[55%] top-0 h-full w-0.5 bg-black/50" />
-               <div className="absolute left-[80%] top-0 h-full w-0.5 bg-black/50" />
+         <div className="flex items-center gap-4 mb-6 text-xs font-mono text-white/40">
+            <span className="w-10 text-right tabular-nums">34:12</span>
+            <div className="flex-1 h-1 bg-white/10 rounded-full relative group cursor-pointer">
+               <div className="absolute left-0 top-0 h-full w-[34%] bg-white/80 rounded-full" />
+               <div className="absolute left-0 top-0 h-full w-[45%] bg-white/10 rounded-full -z-10" />
+               <div className="absolute left-[34%] top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg" />
             </div>
-            <span className="w-12">{content.duration.replace('h', ':').replace('m', '')}</span>
+            <span className="w-10 tabular-nums">{content.duration.replace('h', ':').replace('m', '')}</span>
          </div>
-         
+
          {/* Playback Controls */}
-         <div className="flex justify-between items-center text-white">
-            <div className="flex items-center gap-10">
-              <div className="flex items-center gap-4">
-                <button onClick={togglePlay} className="hover:text-white transition-colors hover:scale-110 transform duration-200 bg-[#F21C4C] text-white p-5 rounded-full shadow-[0_0_30px_rgba(242,28,76,0.4)] border border-white/10">
-                  <Play className="w-7 h-7 fill-current ml-1" />
-                </button>
-              </div>
-              
-              <div className="flex items-center gap-8">
-                <button className="text-white/60 hover:text-white transition-colors flex flex-col items-center gap-1 group">
-                  <Rewind className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
-                  <span className="text-[9px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">-10s</span>
-                </button>
-                <button className="text-white/60 hover:text-white transition-colors flex flex-col items-center gap-1 group">
-                  <SkipForward className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                  <span className="text-[9px] font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">+10s</span>
-                </button>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 bg-white/5 rounded-full p-1 border border-white/5">
-              <button className="p-3 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white relative group">
-                <Volume2 className="w-5 h-5" />
-                {/* Volume Slider Popup would go here */}
+         <div className="flex justify-between items-center">
+            <div className="flex items-center gap-6">
+              {/* Skip back */}
+              <button className="text-white/50 hover:text-white transition-colors p-2">
+                <Rewind className="w-5 h-5" />
               </button>
-              <div className="w-px h-4 bg-white/10" />
-              <button className="p-3 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white">
+
+              {/* Main play button */}
+              <button
+                onClick={togglePlay}
+                className="w-14 h-14 bg-white rounded-full flex items-center justify-center hover:scale-105 transition-transform"
+              >
+                <Play className="w-6 h-6 text-black fill-black ml-0.5" />
+              </button>
+
+              {/* Skip forward */}
+              <button className="text-white/50 hover:text-white transition-colors p-2">
+                <SkipForward className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-1 bg-white/5 rounded-full p-1">
+              <button className="p-2.5 hover:bg-white/10 rounded-full transition-colors text-white/60 hover:text-white">
+                <Volume2 className="w-5 h-5" />
+              </button>
+              <button className="p-2.5 hover:bg-white/10 rounded-full transition-colors text-white/60 hover:text-white">
                 <Maximize2 className="w-5 h-5" />
               </button>
             </div>
@@ -598,13 +807,15 @@ function VideoPlayer({ content, onClose }: { content: ContentItem, onClose: () =
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true); // State for Play/Pause logic
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [showControls, setShowControls] = useState(false);
+  const [progress, setProgress] = useState(34);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchVideo = () => {
       setTimeout(() => {
-        // Fallback video URL (Pexels/Vimeo open source)
         const demoVideo = "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0fd273d2c6d9a064f3ae35579b2bbdf&profile_id=164&oauth2_token_id=57447761";
         setVideoUrl(demoVideo);
         setLoading(false);
@@ -624,67 +835,179 @@ function VideoPlayer({ content, onClose }: { content: ContentItem, onClose: () =
     }
   };
 
+  const handleMouseMove = () => {
+    if (isPlaying) {
+      setShowControls(true);
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
+      controlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 3000);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden">
+    <div
+      className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden cursor-none"
+      onMouseMove={handleMouseMove}
+      style={{ cursor: showControls || !isPlaying ? 'default' : 'none' }}
+    >
        {/* Layer 1: Video Content */}
        <div className="absolute inset-0 z-0">
          {error ? (
-           <motion.div 
+           <motion.div
              initial={{ scale: 1 }}
-             animate={{ scale: 1.1 }}
+             animate={{ scale: 1.05 }}
              transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
              className="w-full h-full"
            >
-             <img src={content.backdrop} className="w-full h-full object-cover opacity-50" alt="Simulation" />
+             <img src={content.backdrop} className="w-full h-full object-cover opacity-60" alt="Simulation" />
            </motion.div>
          ) : (
            videoUrl && !loading && (
-             <video 
+             <video
                ref={videoRef}
-               autoPlay 
+               autoPlay
                className="w-full h-full object-cover"
                onError={() => setError(true)}
                src={videoUrl}
-               onClick={togglePlay} // Click video to pause/play
+               onClick={togglePlay}
              />
            )
          )}
-         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
        </div>
 
-       {/* Layer 2: Loading or Paused UI */}
+       {/* Layer 2: Loading */}
        <AnimatePresence>
          {loading && (
-           <motion.div exit={{ opacity: 0 }} className="absolute inset-0 flex items-center justify-center z-50 bg-black">
+           <motion.div
+             exit={{ opacity: 0 }}
+             transition={{ duration: 0.5 }}
+             className="absolute inset-0 flex items-center justify-center z-50 bg-black"
+           >
               <div className="text-center">
-                <Loader2 className="w-12 h-12 animate-spin text-[#F21C4C] mx-auto mb-4" />
-                <p className="text-xs font-bold text-white/50 tracking-[0.2em] uppercase">Initialisation du flux sécurisé</p>
+                <div className="relative w-16 h-16 mx-auto mb-6">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 border-2 border-white/20 border-t-white rounded-full"
+                  />
+                </div>
+                <p className="text-sm text-white/50">Chargement...</p>
               </div>
            </motion.div>
          )}
+       </AnimatePresence>
 
+       {/* Layer 3: Paused Overlay */}
+       <AnimatePresence>
          {!isPlaying && !loading && (
            <PlayerOverlay content={content} onClose={onClose} isPaused={!isPlaying} togglePlay={togglePlay} />
          )}
        </AnimatePresence>
 
-       {/* Layer 3: Minimal Controls when Playing (Hover only) */}
-       {isPlaying && !loading && (
-         <motion.div 
-           initial={{ opacity: 0 }}
-           whileHover={{ opacity: 1 }}
-           className="absolute inset-0 z-10 flex flex-col justify-between p-8 bg-gradient-to-t from-black/60 via-transparent to-black/60 transition-opacity duration-300"
-         >
-            <button onClick={onClose} className="self-start bg-black/20 backdrop-blur-md p-3 rounded-full hover:bg-white/20 transition-all border border-white/5">
-              <ArrowLeft className="w-6 h-6 text-white" />
-            </button>
-            <div className="self-center p-6 bg-black/40 backdrop-blur-xl rounded-full cursor-pointer hover:scale-110 transition-transform border border-white/10" onClick={togglePlay}>
-               <Pause className="w-8 h-8 fill-white text-white" />
-            </div>
-            <div className="w-full h-1 bg-white/30 rounded-full">
-               <div className="h-full w-[34%] bg-[#F21C4C] rounded-full" />
-            </div>
-         </motion.div>
+       {/* Layer 4: Minimal Controls when Playing */}
+       <AnimatePresence>
+         {isPlaying && !loading && showControls && (
+           <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             transition={{ duration: 0.3 }}
+             className="absolute inset-0 z-10 flex flex-col justify-between pointer-events-none"
+           >
+             {/* Top gradient */}
+             <div className="bg-gradient-to-b from-black/60 to-transparent p-8 pointer-events-auto">
+               <div className="flex items-center gap-4">
+                 <button onClick={onClose} className="bg-white/10 backdrop-blur-md p-3 rounded-full hover:bg-white/20 transition-all">
+                   <ArrowLeft className="w-5 h-5 text-white" />
+                 </button>
+                 <img src={donaLogoMacaron} alt="Dona" className="h-8 w-8 object-contain opacity-80" />
+               </div>
+             </div>
+
+             {/* Center Play/Pause Button - Apple style */}
+             <div className="flex-1 flex items-center justify-center pointer-events-auto" onClick={togglePlay}>
+               <motion.div
+                 initial={{ scale: 0.8, opacity: 0 }}
+                 animate={{ scale: 1, opacity: 1 }}
+                 exit={{ scale: 0.8, opacity: 0 }}
+                 transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+                 className="w-20 h-20 bg-black/40 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/10 cursor-pointer hover:bg-black/60 hover:scale-110 transition-all duration-200"
+               >
+                 <AnimatePresence mode="wait">
+                   <motion.div
+                     key="pause"
+                     initial={{ scale: 0, rotate: -90 }}
+                     animate={{ scale: 1, rotate: 0 }}
+                     exit={{ scale: 0, rotate: 90 }}
+                     transition={{ duration: 0.2 }}
+                   >
+                     <Pause className="w-8 h-8 text-white fill-white" />
+                   </motion.div>
+                 </AnimatePresence>
+               </motion.div>
+             </div>
+
+             {/* Bottom Controls */}
+             <div className="bg-gradient-to-t from-black/80 to-transparent p-8 pointer-events-auto">
+               {/* Title */}
+               <div className="mb-4">
+                 <h2 className="text-xl font-semibold text-white">{content.title}</h2>
+                 <p className="text-sm text-white/50">{content.year} • {content.duration}</p>
+               </div>
+
+               {/* Progress Bar */}
+               <div className="flex items-center gap-4 text-xs text-white/50">
+                 <span className="tabular-nums w-12">34:12</span>
+                 <div className="flex-1 h-1 bg-white/20 rounded-full relative group cursor-pointer">
+                   <div className="absolute left-0 top-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }} />
+                   <div
+                     className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                     style={{ left: `${progress}%`, transform: `translate(-50%, -50%)` }}
+                   />
+                 </div>
+                 <span className="tabular-nums w-12">{content.duration.replace('h', ':').replace('m', '')}</span>
+               </div>
+
+               {/* Control Buttons */}
+               <div className="flex items-center justify-between mt-4">
+                 <div className="flex items-center gap-4">
+                   <button className="text-white/60 hover:text-white transition-colors p-2">
+                     <Rewind className="w-5 h-5" />
+                   </button>
+                   <button
+                     onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+                     className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-105 transition-transform"
+                   >
+                     <Pause className="w-5 h-5 text-black fill-black" />
+                   </button>
+                   <button className="text-white/60 hover:text-white transition-colors p-2">
+                     <SkipForward className="w-5 h-5" />
+                   </button>
+                 </div>
+
+                 <div className="flex items-center gap-2">
+                   <button className="text-white/60 hover:text-white transition-colors p-2">
+                     <Volume2 className="w-5 h-5" />
+                   </button>
+                   <button className="text-white/60 hover:text-white transition-colors p-2">
+                     <Maximize2 className="w-5 h-5" />
+                   </button>
+                 </div>
+               </div>
+             </div>
+           </motion.div>
+         )}
+       </AnimatePresence>
+
+       {/* Click anywhere to toggle when playing without controls visible */}
+       {isPlaying && !loading && !showControls && (
+         <div
+           className="absolute inset-0 z-5"
+           onClick={togglePlay}
+         />
        )}
     </div>
   );
@@ -791,26 +1114,33 @@ function DetailPage() {
 function SearchPage() {
   const [query, setQuery] = useState('');
   const { navigateTo } = useRouterStore();
-  
+
   const results = useMemo(() => {
     if (!query) return [];
     return MOCK_CONTENT.filter(c => c.title.toLowerCase().includes(query.toLowerCase()));
   }, [query]);
 
+  // Mock data for sections
+  const recentSearches = ['Oppenheimer', 'Succession', 'Science Fiction', 'Christopher Nolan'];
+  const recommendedContent = MOCK_CONTENT.slice(0, 6);
+  const leavingSoonContent = MOCK_CONTENT.slice(2, 6);
+
   return (
-    <div className="pt-24 px-6 md:px-16 min-h-screen bg-[#050505]">
-      <div className="relative max-w-3xl mx-auto mb-16">
+    <div className="pt-24 px-6 md:px-16 min-h-screen bg-[#050505] pb-20">
+      {/* Search Input */}
+      <div className="relative max-w-3xl mx-auto mb-12">
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 w-6 h-6" />
-        <input 
+        <input
           autoFocus
-          type="text" 
-          placeholder="Quel film ou série cherchez-vous ?" 
+          type="text"
+          placeholder="Quel film ou série cherchez-vous ?"
           className="w-full bg-[#121212] border border-white/5 text-white text-2xl py-6 pl-16 pr-6 focus:ring-2 focus:ring-[#F21C4C] rounded-2xl placeholder:text-gray-600 transition-all shadow-xl"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
 
+      {/* Search Results */}
       {query && (
         <div className="animate-fade-in-up">
           <h2 className="text-xl text-gray-400 mb-8">Résultats pour <span className="text-white">"{query}"</span></h2>
@@ -828,16 +1158,115 @@ function SearchPage() {
         </div>
       )}
 
+      {/* Default State - No Query */}
       {!query && (
-        <div className="max-w-4xl mx-auto">
-           <h2 className="text-lg font-bold mb-6 uppercase tracking-widest text-gray-500">Genres Populaires</h2>
-           <div className="flex flex-wrap gap-4">
-             {['Science Fiction', 'Action', 'Comédie', 'Drame', 'Animation', 'Documentaire', 'Thriller'].map(tag => (
-               <button key={tag} onClick={() => setQuery(tag)} className="px-6 py-3 bg-[#121212] hover:bg-[#1E1E1E] rounded-xl text-md font-medium transition-all hover:scale-105 border border-white/5">
-                 {tag}
-               </button>
-             ))}
-           </div>
+        <div className="space-y-16">
+          {/* Promotional Banner - Apple Style */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a0a0f] via-[#120808] to-[#0a0505] border border-white/5">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgZmlsbD0iI0YyMUM0QyIgZmlsbC1vcGFjaXR5PSIwLjAzIiBjeD0iMjAiIGN5PSIyMCIgcj0iMSIvPjwvZz48L3N2Zz4=')] opacity-50" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#F21C4C] rounded-full blur-[150px] opacity-20" />
+            <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#F21C4C] rounded-full blur-[120px] opacity-10" />
+
+            <div className="relative flex flex-col lg:flex-row items-center gap-8 p-8 lg:p-12">
+              {/* Text Content */}
+              <div className="flex-1 text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F21C4C]/20 rounded-full mb-6">
+                  <Sparkles className="w-4 h-4 text-[#F21C4C]" />
+                  <span className="text-[#F21C4C] text-sm font-semibold uppercase tracking-wider">Offre limitée</span>
+                </div>
+                <h2 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                  3 mois de <span className="text-[#F21C4C]">Dona+</span><br />
+                  pour le prix d'un
+                </h2>
+                <p className="text-gray-400 text-lg mb-8 max-w-md">
+                  Accédez à tout le catalogue en 4K HDR, téléchargements illimités et 4 écrans simultanés.
+                </p>
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <button className="px-8 py-4 bg-[#F21C4C] hover:bg-[#D9123C] text-white font-bold rounded-full text-lg transition-all hover:scale-105 shadow-lg shadow-[#F21C4C]/30">
+                    Profiter de l'offre
+                  </button>
+                  <span className="text-gray-500 text-sm">Jusqu'au 31 janvier 2026</span>
+                </div>
+              </div>
+
+              {/* Visual */}
+              <div className="relative w-72 h-72 lg:w-80 lg:h-80 flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#F21C4C]/30 to-transparent rounded-3xl" />
+                <img
+                  src={coverCyberpunk}
+                  alt="Dona+ Premium"
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl"
+                />
+                <div className="absolute -bottom-4 -right-4 bg-[#F21C4C] text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-lg">
+                  -66%
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Searches */}
+          <div>
+            <h2 className="text-lg font-bold mb-6 uppercase tracking-widest text-gray-500 flex items-center gap-3">
+              <Search className="w-5 h-5" />
+              Recherches récentes
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {recentSearches.map(term => (
+                <button
+                  key={term}
+                  onClick={() => setQuery(term)}
+                  className="group flex items-center gap-3 px-5 py-3 bg-[#121212] hover:bg-[#1E1E1E] rounded-full text-md transition-all border border-white/5 hover:border-white/10"
+                >
+                  <span className="text-gray-400 group-hover:text-white transition-colors">{term}</span>
+                  <X className="w-4 h-4 text-gray-600 hover:text-white" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommended for You */}
+          <div>
+            <h2 className="text-lg font-bold mb-6 uppercase tracking-widest text-gray-500 flex items-center gap-3">
+              <Star className="w-5 h-5" />
+              Recommandés pour vous
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+              {recommendedContent.map(c => (
+                <MediaCard key={c.id} item={c} onClick={() => navigateTo('detail', c.id)} />
+              ))}
+            </div>
+          </div>
+
+          {/* Leaving Soon */}
+          <div>
+            <h2 className="text-lg font-bold mb-6 uppercase tracking-widest text-[#F21C4C] flex items-center gap-3">
+              <Zap className="w-5 h-5" />
+              Bientôt hors catalogue
+            </h2>
+            <p className="text-gray-500 mb-6 -mt-4">Ces contenus quittent Dona dans les 30 prochains jours</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {leavingSoonContent.map(c => (
+                <div key={c.id} className="relative group">
+                  <MediaCard item={c} onClick={() => navigateTo('detail', c.id)} />
+                  <div className="absolute top-3 left-3 px-3 py-1 bg-[#F21C4C] text-white text-xs font-bold rounded-full">
+                    Encore {Math.floor(Math.random() * 25) + 5} jours
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Popular Genres */}
+          <div>
+            <h2 className="text-lg font-bold mb-6 uppercase tracking-widest text-gray-500">Genres Populaires</h2>
+            <div className="flex flex-wrap gap-4">
+              {['Science Fiction', 'Action', 'Comédie', 'Drame', 'Animation', 'Documentaire', 'Thriller'].map(tag => (
+                <button key={tag} onClick={() => setQuery(tag)} className="px-6 py-3 bg-[#121212] hover:bg-[#1E1E1E] rounded-full text-md font-medium transition-all hover:scale-105 border border-white/5">
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -847,42 +1276,395 @@ function SearchPage() {
 // 3. PROFILE PAGE (Standardized)
 function ProfilePage() {
   const { logout } = useUserStore();
-  
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-[#050505] pt-10">
-      <div className="max-w-2xl w-full bg-[#121212] border border-white/5 p-10 rounded-3xl shadow-2xl relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#F21C4C] rounded-full blur-[100px] opacity-20" />
+  const { navigateTo } = useRouterStore();
+  const [showSettings, setShowSettings] = useState(false);
 
-        <div className="flex flex-col md:flex-row items-center gap-8 mb-12 relative z-10">
-          <div className="relative group cursor-pointer">
-            <img src={MOCK_USER.avatar} className="w-32 h-32 rounded-full border-4 border-[#1E1E1E] group-hover:border-[#F21C4C] transition-colors" alt="avatar" />
-            <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-xs font-bold">Modifier</span>
+  // Mock user stats for gamification
+  const userStats = {
+    level: 12,
+    xp: 2450,
+    xpToNext: 3000,
+    hoursWatched: 156,
+    moviesWatched: 47,
+    seriesCompleted: 8,
+    streak: 14,
+    badges: [
+      { name: 'Binge Watcher', icon: 'fire', description: '10 épisodes en un jour' },
+      { name: 'Cinéphile', icon: 'film', description: '50 films regardés' },
+      { name: 'Noctambule', icon: 'moon', description: 'Regarder après minuit' },
+      { name: 'Explorateur', icon: 'globe', description: '10 genres différents' },
+    ],
+    recentAchievement: { name: 'Critique en herbe', icon: 'trophy', progress: 80 },
+  };
+
+  // Badge icon renderer
+  const BadgeIcon = ({ type, className }: { type: string; className?: string }) => {
+    const iconClass = className || "w-8 h-8";
+    switch (type) {
+      case 'fire': return <Fire weight="fill" className={iconClass} />;
+      case 'film': return <FilmSlate weight="fill" className={iconClass} />;
+      case 'moon': return <Moon weight="fill" className={iconClass} />;
+      case 'globe': return <GlobeHemisphereWest weight="fill" className={iconClass} />;
+      case 'trophy': return <Trophy weight="fill" className={iconClass} />;
+      case 'target': return <Target weight="fill" className={iconClass} />;
+      default: return <Medal weight="fill" className={iconClass} />;
+    }
+  };
+
+  // Mock taste profile
+  const tasteProfile = [
+    { genre: 'Science Fiction', score: 92 },
+    { genre: 'Thriller', score: 85 },
+    { genre: 'Drame', score: 78 },
+    { genre: 'Action', score: 72 },
+    { genre: 'Documentaire', score: 65 },
+  ];
+
+  // Mock recommendations based on profile
+  const personalizedRecs = MOCK_CONTENT.slice(0, 4);
+  const watchlist = MOCK_CONTENT.slice(2, 5);
+  const continueWatching = MOCK_CONTENT.slice(0, 3);
+
+  // Settings panel component
+  const SettingsPanel = () => (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className="fixed right-0 top-0 h-full w-full max-w-md bg-[#0a0a0a] border-l border-white/5 z-50 overflow-y-auto"
+    >
+      <div className="p-8">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold">Paramètres</h2>
+          <button onClick={() => setShowSettings(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div className="p-5 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
+            <div className="flex items-center gap-4">
+              <CreditCard className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] transition-colors" />
+              <div className="flex-1">
+                <h3 className="font-bold">Abonnement</h3>
+                <p className="text-xs text-gray-500">Plan Dona+ • Renouvellement le 15 fév</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
             </div>
           </div>
-          <div className="text-center md:text-left">
-            <h2 className="text-3xl font-bold mb-1">{MOCK_USER.name}</h2>
-            <p className="text-gray-400 mb-3">{MOCK_USER.email}</p>
-            <span className="inline-block px-3 py-1 bg-[#F21C4C]/20 text-[#F21C4C] rounded-full text-xs font-bold uppercase tracking-wider">Membre {MOCK_USER.plan}</span>
+
+          <div className="p-5 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
+            <div className="flex items-center gap-4">
+              <ShieldCheck className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] transition-colors" />
+              <div className="flex-1">
+                <h3 className="font-bold">Sécurité</h3>
+                <p className="text-xs text-gray-500">Mot de passe et authentification</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </div>
+          </div>
+
+          <div className="p-5 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
+            <div className="flex items-center gap-4">
+              <Monitor className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] transition-colors" />
+              <div className="flex-1">
+                <h3 className="font-bold">Appareils</h3>
+                <p className="text-xs text-gray-500">3 appareils connectés</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </div>
+          </div>
+
+          <div className="p-5 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
+            <div className="flex items-center gap-4">
+              <Globe className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] transition-colors" />
+              <div className="flex-1">
+                <h3 className="font-bold">Langue & Sous-titres</h3>
+                <p className="text-xs text-gray-500">Français • Sous-titres activés</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </div>
+          </div>
+
+          <div className="p-5 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
+            <div className="flex items-center gap-4">
+              <Settings className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] transition-colors" />
+              <div className="flex-1">
+                <h3 className="font-bold">Préférences de lecture</h3>
+                <p className="text-xs text-gray-500">Qualité auto • Lecture auto activée</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 relative z-10">
-          <div className="p-6 bg-[#0A0A0A] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
-            <CreditCard className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] mb-4" />
-            <h3 className="font-bold mb-1">Abonnement</h3>
-            <p className="text-xs text-gray-500">Gérer votre plan et facturation</p>
+        <div className="mt-8 pt-8 border-t border-white/5">
+          <button
+            onClick={logout}
+            className="w-full flex items-center justify-center gap-3 py-4 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            Se déconnecter
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#050505] pb-20">
+      {/* Settings Overlay */}
+      <AnimatePresence>
+        {showSettings && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 z-40"
+              onClick={() => setShowSettings(false)}
+            />
+            <SettingsPanel />
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Header */}
+      <div className="relative pt-24 pb-12 px-8 lg:px-16">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
+        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <img src={MOCK_USER.avatar} className="w-24 h-24 rounded-full border-4 border-white/10" alt="avatar" />
+              <div className="absolute -bottom-1 -right-1 bg-gradient-to-br from-[#5E5CE6] to-[#BF5AF2] text-white text-xs font-bold px-2 py-1 rounded-full">
+                Niv.{userStats.level}
+              </div>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Bonjour, {MOCK_USER.name.split(' ')[0]} !</h1>
+              <p className="text-gray-400">Membre {MOCK_USER.plan} depuis mars 2024</p>
+              {/* XP Bar - Apple style subtle gradient */}
+              <div className="mt-3 flex items-center gap-3">
+                <div className="w-48 h-2 bg-white/[0.08] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#5E5CE6] to-[#BF5AF2] rounded-full transition-all"
+                    style={{ width: `${(userStats.xp / userStats.xpToNext) * 100}%` }}
+                  />
+                </div>
+                <span className="text-xs text-gray-500">{userStats.xp}/{userStats.xpToNext} XP</span>
+              </div>
+            </div>
           </div>
-          <div className="p-6 bg-[#0A0A0A] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-colors cursor-pointer group">
-            <ShieldCheck className="w-6 h-6 text-gray-500 group-hover:text-[#F21C4C] mb-4" />
-            <h3 className="font-bold mb-1">Sécurité</h3>
-            <p className="text-xs text-gray-500">Mot de passe et appareils</p>
+          <button
+            onClick={() => setShowSettings(true)}
+            className="flex items-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+          >
+            <Settings className="w-5 h-5" />
+            <span>Paramètres</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="px-8 lg:px-16 space-y-12">
+        {/* Stats Cards - Apple style muted colors */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04]">
+            <Clock weight="fill" className="w-5 h-5 text-[#64D2FF] mb-2" />
+            <div className="text-3xl font-semibold text-white">{userStats.hoursWatched}h</div>
+            <div className="text-sm text-gray-500 mt-1">de visionnage</div>
+          </div>
+          <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04]">
+            <FilmSlate weight="fill" className="w-5 h-5 text-[#FF9F0A] mb-2" />
+            <div className="text-3xl font-semibold text-white">{userStats.moviesWatched}</div>
+            <div className="text-sm text-gray-500 mt-1">films regardés</div>
+          </div>
+          <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04]">
+            <BookmarkSimple weight="fill" className="w-5 h-5 text-[#30D158] mb-2" />
+            <div className="text-3xl font-semibold text-white">{userStats.seriesCompleted}</div>
+            <div className="text-sm text-gray-500 mt-1">séries terminées</div>
+          </div>
+          <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04] relative overflow-hidden">
+            <Fire weight="fill" className="w-5 h-5 text-[#FF9500] mb-2" />
+            <div className="text-3xl font-semibold text-white">{userStats.streak}</div>
+            <div className="text-sm text-gray-500 mt-1">jours de suite</div>
           </div>
         </div>
 
-        <Button variant="outline" className="w-full justify-center py-4 rounded-xl border-white/10 text-gray-400 hover:text-white hover:bg-white/5" onClick={logout} leftIcon={<LogOut className="w-5 h-5" />}>
-          Se déconnecter
-        </Button>
+        {/* Achievement Progress - Apple style */}
+        <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04]">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FFD60A]/20 to-[#FF9F0A]/20 flex items-center justify-center">
+                <BadgeIcon type={userStats.recentAchievement.icon} className="w-6 h-6 text-[#FFD60A]" />
+              </div>
+              <div>
+                <h3 className="font-semibold">Prochain succès : {userStats.recentAchievement.name}</h3>
+                <p className="text-sm text-gray-500">Note 10 contenus pour débloquer</p>
+              </div>
+            </div>
+            <span className="text-white/60 font-medium">{userStats.recentAchievement.progress}%</span>
+          </div>
+          <div className="w-full h-2 bg-white/[0.08] rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#FFD60A] to-[#FF9F0A] rounded-full"
+              style={{ width: `${userStats.recentAchievement.progress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Badges - Apple style */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+            <Medal weight="fill" className="w-6 h-6 text-[#FFD60A]" />
+            Vos badges
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {userStats.badges.map((badge, i) => {
+              const colors = [
+                { bg: 'from-[#FF9500]/20 to-[#FF6B00]/20', icon: 'text-[#FF9500]' },
+                { bg: 'from-[#5E5CE6]/20 to-[#BF5AF2]/20', icon: 'text-[#BF5AF2]' },
+                { bg: 'from-[#64D2FF]/20 to-[#5AC8FA]/20', icon: 'text-[#64D2FF]' },
+                { bg: 'from-[#30D158]/20 to-[#34C759]/20', icon: 'text-[#30D158]' },
+              ];
+              const color = colors[i % colors.length];
+              return (
+                <div key={badge.name} className="bg-[#1c1c1e] rounded-2xl p-5 border border-white/[0.04] text-center hover:bg-[#2c2c2e] transition-colors cursor-pointer group">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${color.bg} flex items-center justify-center mx-auto mb-3`}>
+                    <BadgeIcon type={badge.icon} className={`w-7 h-7 ${color.icon}`} />
+                  </div>
+                  <h3 className="font-semibold text-sm">{badge.name}</h3>
+                  <p className="text-xs text-gray-500 mt-1">{badge.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Taste Profile - Apple style */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+            <Heart weight="fill" className="w-6 h-6 text-[#FF375F]" />
+            Votre profil cinématographique
+          </h2>
+          <div className="bg-[#1c1c1e] rounded-2xl p-6 border border-white/[0.04]">
+            <div className="space-y-4">
+              {tasteProfile.map((taste, i) => {
+                const barColors = [
+                  'from-[#5E5CE6] to-[#BF5AF2]',
+                  'from-[#64D2FF] to-[#5AC8FA]',
+                  'from-[#FF9F0A] to-[#FF9500]',
+                  'from-[#30D158] to-[#34C759]',
+                  'from-[#FF375F] to-[#FF2D55]',
+                ];
+                return (
+                  <div key={taste.genre} className="flex items-center gap-4">
+                    <span className="w-32 text-sm text-gray-400">{taste.genre}</span>
+                    <div className="flex-1 h-2 bg-white/[0.08] rounded-full overflow-hidden">
+                      <div
+                        className={`h-full bg-gradient-to-r ${barColors[i % barColors.length]} rounded-full transition-all`}
+                        style={{ width: `${taste.score}%` }}
+                      />
+                    </div>
+                    <span className="text-sm text-gray-400 w-12 text-right">{taste.score}%</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-sm text-gray-500 mt-6 pt-4 border-t border-white/[0.04]">
+              Basé sur vos 156 heures de visionnage et vos évaluations
+            </p>
+          </div>
+        </section>
+
+        {/* Continue Watching */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-semibold flex items-center gap-3">
+              <Play className="w-6 h-6 text-[#64D2FF]" />
+              Reprendre
+            </h2>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {continueWatching.map((item, i) => (
+              <div key={item.id} className="flex gap-4 bg-[#1c1c1e] rounded-2xl p-4 border border-white/[0.04] cursor-pointer hover:bg-[#2c2c2e] transition-colors group" onClick={() => navigateTo('detail', item.id)}>
+                <div className="relative w-28 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                  <img src={item.poster} alt={item.title} className="w-full h-full object-cover" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                    <div className="h-full bg-[#64D2FF]" style={{ width: `${40 + i * 20}%` }} />
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold truncate group-hover:text-white transition-colors">{item.title}</h3>
+                  <p className="text-sm text-gray-500">Il reste {30 - i * 10} min</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Personalized Recommendations */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-semibold flex items-center gap-3">
+                <Sparkles className="w-6 h-6 text-[#FFD60A]" />
+                Rien que pour vous
+              </h2>
+              <p className="text-gray-500 text-sm mt-1">Sélectionnés selon vos goûts</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {personalizedRecs.map(item => (
+              <div key={item.id} className="relative">
+                <MediaCard item={item} onClick={() => navigateTo('detail', item.id)} />
+                <div className="absolute top-3 right-3 px-2 py-1 bg-[#30D158] text-white text-xs font-bold rounded-full">
+                  {item.match}% match
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Watchlist */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-semibold flex items-center gap-3">
+              <BookmarkSimple weight="fill" className="w-6 h-6 text-[#BF5AF2]" />
+              Ma liste
+            </h2>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="flex gap-5 overflow-x-auto pb-4 no-scrollbar">
+            {watchlist.map(item => (
+              <div key={item.id} className="w-[180px] flex-shrink-0">
+                <MediaCard item={item} onClick={() => navigateTo('detail', item.id)} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Weekly Challenge - Apple style */}
+        <div className="bg-gradient-to-br from-[#5E5CE6]/20 via-[#1c1c1e] to-[#BF5AF2]/20 rounded-3xl p-8 border border-white/[0.04] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#5E5CE6] rounded-full blur-[150px] opacity-10" />
+          <div className="relative flex flex-col md:flex-row items-center gap-8">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#5E5CE6]/20 rounded-full mb-4">
+                <Lightning weight="fill" className="w-4 h-4 text-[#FFD60A]" />
+                <span className="text-sm font-semibold text-white/80">Défi de la semaine</span>
+              </div>
+              <h3 className="text-2xl font-semibold mb-3">Découvrez 3 documentaires</h3>
+              <p className="text-gray-400 mb-4">Élargissez vos horizons et gagnez 500 XP bonus</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-2 bg-white/[0.08] rounded-full overflow-hidden max-w-xs">
+                  <div className="h-full bg-gradient-to-r from-[#FFD60A] to-[#FF9F0A] rounded-full" style={{ width: '33%' }} />
+                </div>
+                <span className="text-sm text-white/60">1/3</span>
+              </div>
+            </div>
+            <Button variant="glass" size="lg">Relever le défi</Button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -897,8 +1679,8 @@ function LandingPage() {
 
   return (
     <div className="bg-[#050505] text-white min-h-screen font-sans selection:bg-[#F21C4C] selection:text-white overflow-x-hidden">
-      <nav className="fixed top-0 w-full z-50 px-6 py-6 flex items-center justify-between transition-all duration-300">
-        <div className="text-2xl font-black tracking-tighter text-[#F21C4C]">DONA.</div>
+      <nav className="fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between transition-all duration-300 bg-gradient-to-b from-black/50 to-transparent">
+        <img src={donaLogoBanner} alt="Dona" className="h-8 object-contain" />
         <div className="flex items-center gap-6">
           <button onClick={login} className="text-sm font-bold text-white/80 hover:text-white transition-colors">Se connecter</button>
           <Button variant="primary" size="sm" onClick={login}>S'abonner</Button>
@@ -960,9 +1742,202 @@ function LandingPage() {
         </div>
       </section>
 
-      <section className="py-32 bg-[#0A0A0A] border-t border-white/5 relative overflow-hidden">
+      {/* Mobile Apps Section */}
+      <section className="py-32 bg-[#0A0A0A] border-t border-b border-white/5 relative overflow-hidden">
+        {/* Background glow effects */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#F21C4C] rounded-full blur-[200px] opacity-10 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-600 rounded-full blur-[180px] opacity-10 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Text Content */}
+            <div className="order-2 lg:order-1">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-8">
+                <Smartphone className="w-4 h-4 text-[#F21C4C]" />
+                <span className="text-xs font-bold uppercase tracking-wider text-white/80">Applications natives</span>
+              </div>
+
+              <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                Dona dans<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F21C4C] to-purple-500">votre poche.</span>
+              </h2>
+
+              <p className="text-xl text-gray-400 mb-8 leading-relaxed max-w-lg">
+                Téléchargez l'application Dona et emportez vos films et séries préférés partout avec vous. Mode hors-ligne, notifications et streaming en haute qualité.
+              </p>
+
+              <div className="space-y-4 mb-10">
+                {[
+                  { icon: <WifiOff className="w-5 h-5" />, text: "Téléchargement hors-ligne illimité" },
+                  { icon: <Cast className="w-5 h-5" />, text: "AirPlay & Chromecast intégré" },
+                  { icon: <Sparkles className="w-5 h-5" />, text: "Qualité adaptative jusqu'en 4K" },
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-4 text-white/80">
+                    <div className="w-10 h-10 rounded-xl bg-[#F21C4C]/10 border border-[#F21C4C]/20 flex items-center justify-center text-[#F21C4C]">
+                      {feature.icon}
+                    </div>
+                    <span className="font-medium">{feature.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* App Store Buttons */}
+              <div className="flex flex-wrap gap-4">
+                <a href="#" className="group flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full border border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:scale-105">
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                  <div className="text-left">
+                    <div className="text-[10px] uppercase tracking-wide text-white/60">Télécharger sur</div>
+                    <div className="text-lg font-bold -mt-1">App Store</div>
+                  </div>
+                </a>
+
+                <a href="#" className="group flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full border border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:scale-105">
+                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.802 8.99l-2.303 2.303-8.635-8.635z"/>
+                  </svg>
+                  <div className="text-left">
+                    <div className="text-[10px] uppercase tracking-wide text-white/60">Disponible sur</div>
+                    <div className="text-lg font-bold -mt-1">Google Play</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {/* Phone Mockup */}
+            <div className="order-1 lg:order-2 flex justify-center">
+              <div className="relative">
+                {/* Glow behind phone */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#F21C4C]/40 to-purple-600/40 blur-[100px] scale-90" />
+
+                {/* Phone Frame */}
+                <div className="relative w-[300px] md:w-[340px] aspect-[9/19] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[45px] p-2 border border-gray-700 shadow-2xl shadow-black/80">
+                  {/* Phone Inner Screen */}
+                  <div className="w-full h-full bg-black rounded-[38px] overflow-hidden relative">
+                    {/* Dynamic Island */}
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-8 bg-black rounded-full z-30 flex items-center justify-center">
+                      <div className="w-3 h-3 rounded-full bg-gray-900 border border-gray-800" />
+                    </div>
+
+                    {/* Full Screen Video Player */}
+                    <div className="w-full h-full relative">
+                      {/* Video Background - Action Movie Scene */}
+                      <img
+                        src={coverTLOU}
+                        className="w-full h-full object-cover"
+                        alt="Film en cours de lecture"
+                      />
+
+                      {/* Cinematic Letterbox Effect */}
+                      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent" />
+
+                      {/* Player Controls Overlay */}
+                      <div className="absolute inset-0 flex flex-col justify-between p-4 pt-14">
+                        {/* Top Bar */}
+                        <div className="flex justify-between items-start">
+                          <div className="bg-black/40 backdrop-blur-md rounded-full p-2">
+                            <ArrowLeft className="w-4 h-4 text-white" />
+                          </div>
+                          <div className="flex gap-2">
+                            <div className="bg-black/40 backdrop-blur-md rounded-full p-2">
+                              <Cast className="w-4 h-4 text-white" />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Center Play Button */}
+                        <div className="flex-1 flex items-center justify-center">
+                          <div className="bg-white/20 backdrop-blur-xl rounded-full p-4 border border-white/30">
+                            <Pause className="w-8 h-8 text-white fill-white" />
+                          </div>
+                        </div>
+
+                        {/* Bottom Controls */}
+                        <div className="space-y-3">
+                          {/* Title Info */}
+                          <div>
+                            <div className="text-[10px] text-[#F21C4C] font-bold uppercase tracking-wider mb-0.5">En lecture</div>
+                            <div className="text-base font-bold text-white">The Last of Us</div>
+                            <div className="text-[10px] text-white/60">S1 E3 • Long Long Time</div>
+                          </div>
+
+                          {/* Progress Bar */}
+                          <div className="space-y-1">
+                            <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                              <div className="h-full w-[45%] bg-[#F21C4C] rounded-full" />
+                            </div>
+                            <div className="flex justify-between text-[9px] text-white/50 font-medium">
+                              <span>32:15</span>
+                              <span>1:16:42</span>
+                            </div>
+                          </div>
+
+                          {/* Control Buttons */}
+                          <div className="flex items-center justify-center gap-8 pb-2">
+                            <Rewind className="w-5 h-5 text-white/70" />
+                            <div className="bg-[#F21C4C] rounded-full p-3 shadow-lg shadow-[#F21C4C]/30">
+                              <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                            </div>
+                            <SkipForward className="w-5 h-5 text-white/70" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating badges */}
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="absolute -left-12 top-1/4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-2xl"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/30">
+                      <Check className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-white/60 uppercase tracking-wider">Téléchargé</div>
+                      <div className="text-sm font-bold text-white">Dune: Part 2</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="absolute -right-8 bottom-1/3 bg-[#F21C4C] rounded-2xl px-5 py-3 shadow-2xl shadow-[#F21C4C]/40"
+                >
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-white" />
+                    <span className="text-sm font-bold text-white">4K HDR</span>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.5 }}
+                  className="absolute -right-6 top-1/4 bg-black/60 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-2xl"
+                >
+                  <div className="flex items-center gap-2">
+                    <WifiOff className="w-4 h-4 text-white/80" />
+                    <span className="text-xs font-bold text-white">Mode Avion</span>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-32 bg-[#050505] relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#F21C4C] rounded-full blur-[200px] opacity-10 pointer-events-none" />
-        
+
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black mb-6">Un Pass. Tout Inclus.</h2>
@@ -978,7 +1953,7 @@ function LandingPage() {
                 <li className="flex gap-3"><Check className="w-5 h-5" /> Qualité HD (720p)</li>
                 <li className="flex gap-3"><Check className="w-5 h-5" /> Publicités incluses</li>
               </ul>
-              <Button variant="outline" className="w-full py-4 rounded-xl" onClick={login}>Créer un compte</Button>
+              <Button variant="outline" className="w-full" size="lg" onClick={login}>Créer un compte</Button>
             </div>
 
             <div className="p-10 rounded-3xl border-2 border-[#F21C4C] bg-[#121212] shadow-2xl shadow-[#F21C4C]/20 relative transform scale-105">
@@ -993,7 +1968,7 @@ function LandingPage() {
                 <li className="flex gap-3 items-center"><div className="bg-[#F21C4C] rounded-full p-1"><Check className="w-3 h-3 text-white" /></div> 4 Écrans simultanés</li>
                 <li className="flex gap-3 items-center"><div className="bg-[#F21C4C] rounded-full p-1"><Check className="w-3 h-3 text-white" /></div> Sans publicité</li>
               </ul>
-              <Button variant="primary" size="xl" className="w-full py-5 rounded-xl text-lg shadow-xl shadow-[#F21C4C]/20" onClick={login}>Essayer 30 jours gratuitement</Button>
+              <Button variant="primary" size="xl" className="w-full shadow-xl shadow-[#F21C4C]/20" onClick={login}>Essayer 30 jours gratuitement</Button>
               <p className="text-center text-xs text-gray-500 mt-4">Puis 9.99€/mois. Résiliable à tout moment.</p>
             </div>
           </div>
@@ -1003,7 +1978,7 @@ function LandingPage() {
       <footer className="py-20 bg-black border-t border-white/5 text-sm text-gray-500">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
           <div>
-            <h4 className="text-white font-bold mb-6">Dona.</h4>
+            <img src={donaLogoBanner} alt="Dona" className="h-6 mb-6" />
             <p>Le futur du streaming est ici.</p>
           </div>
           <div>
@@ -1028,6 +2003,14 @@ function LandingPage() {
               <li>Confidentialité</li>
               <li>Conditions d'utilisation</li>
               <li>Cookies</li>
+              <li>
+                <a
+                  href="#/design-system"
+                  className="hover:text-white transition-colors"
+                >
+                  Design System
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -1060,8 +2043,8 @@ function AppLayout() {
     <div className="flex h-screen bg-[#050505] text-white font-sans overflow-hidden">
       {/* Sidebar */}
       <aside className="w-20 lg:w-64 flex-shrink-0 flex flex-col border-r border-white/5 bg-[#050505] py-8 px-4 z-50">
-        <div className="text-[#F21C4C] font-black text-3xl tracking-tighter px-4 mb-12 flex items-center gap-2 cursor-pointer" onClick={() => navigateTo('browse')}>
-           <span>D.</span>
+        <div className="px-4 mb-12 cursor-pointer" onClick={() => navigateTo('browse')}>
+           <img src={donaLogoBanner} alt="Dona" className="h-6 lg:h-8 object-contain" />
         </div>
         
         <nav className="flex-1 space-y-2">
@@ -1074,19 +2057,19 @@ function AppLayout() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 relative overflow-hidden bg-[#050505]">
+      <main className="flex-1 relative overflow-y-auto overflow-x-hidden bg-[#050505]">
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={currentPage} 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="h-full"
+            className="min-h-full"
           >
             {currentPage === 'browse' && <BrowsePage />}
-            {currentPage === 'movies' && <GridPage title="Films" filter="film" />}
-            {currentPage === 'series' && <GridPage title="Séries" filter="series" />}
+            {currentPage === 'movies' && <MoviesPage />}
+            {currentPage === 'series' && <SeriesPage />}
             {currentPage === 'search' && <SearchPage />}
             {currentPage === 'profile' && <ProfilePage />}
             {currentPage === 'detail' && <DetailPage />}
@@ -1135,6 +2118,330 @@ function BrowsePage() {
 }
 
 // SUB-PAGE: GENERIC GRID
+// Premium Movies Page
+function MoviesPage() {
+  const { navigateTo } = useRouterStore();
+  const films = MOCK_CONTENT.filter(c => c.type === 'film');
+  const featuredFilm = films[0];
+  const newReleases = films.slice(0, 4);
+  const actionFilms = films.filter(f => f.genres?.includes('Action') || f.genres?.includes('Science Fiction'));
+  const dramaFilms = films.filter(f => f.genres?.includes('Drame'));
+
+  // Mock directors collection
+  const directors = [
+    { name: 'Christopher Nolan', image: 'https://image.tmdb.org/t/p/w200/xuAIuYSmsUzKlUMBFGVZaWsY3DZ.jpg', films: 12 },
+    { name: 'Denis Villeneuve', image: 'https://image.tmdb.org/t/p/w200/zdDx9Xs93UIrJFWYApYR28J8M6b.jpg', films: 8 },
+    { name: 'Martin Scorsese', image: 'https://image.tmdb.org/t/p/w200/9U9Y5GQuWX3EZy39B8nkk4NY01S.jpg', films: 15 },
+    { name: 'Quentin Tarantino', image: 'https://image.tmdb.org/t/p/w200/1gjcpAa99FAOWGnrUvHEXXsRs7o.jpg', films: 9 },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#050505] pb-20">
+      {/* Hero Section */}
+      <div className="relative h-[70vh] overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={featuredFilm?.backdrop || coverCyberpunk} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-transparent" />
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-16">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-[#F21C4C] text-white text-xs font-bold rounded-full uppercase">Exclusivité</span>
+              <span className="px-3 py-1 bg-white/10 text-white text-xs font-bold rounded-full">4K HDR</span>
+            </div>
+            <h1 className="text-5xl lg:text-7xl font-black mb-4">{featuredFilm?.title || 'Film à la Une'}</h1>
+            <p className="text-lg text-gray-300 mb-6 line-clamp-2">{featuredFilm?.synopsis}</p>
+            <div className="flex items-center gap-4">
+              <Button variant="primary" size="lg" leftIcon={<Play className="w-5 h-5" />} onClick={() => navigateTo('detail', featuredFilm?.id)}>
+                Regarder
+              </Button>
+              <Button variant="glass" size="lg" leftIcon={<Plus className="w-5 h-5" />}>
+                Ma liste
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-8 lg:px-16 space-y-16 -mt-20 relative z-10">
+        {/* Promotional Banner */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1a0a0f] to-[#0a0505] border border-white/5 p-8">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#F21C4C] rounded-full blur-[120px] opacity-20" />
+          <div className="flex items-center justify-between relative z-10">
+            <div>
+              <span className="text-[#F21C4C] text-sm font-bold uppercase tracking-wider">Offre Cinéma</span>
+              <h3 className="text-2xl font-bold mt-2">2 films loués = 1 film offert</h3>
+              <p className="text-gray-400 mt-1">Valable sur notre sélection Premium jusqu'au 31 janvier</p>
+            </div>
+            <Button variant="primary" size="md">Voir la sélection</Button>
+          </div>
+        </div>
+
+        {/* New Releases - Large Cards */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold">Nouveautés</h2>
+              <p className="text-gray-500 mt-1">Les derniers films ajoutés cette semaine</p>
+            </div>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {newReleases.map((film, i) => (
+              <div key={film.id} className="group relative aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer" onClick={() => navigateTo('detail', film.id)}>
+                <img src={film.poster} alt={film.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
+                  <h3 className="text-xl font-bold">{film.title}</h3>
+                  <p className="text-gray-400 text-sm mt-1">{film.year} • {film.duration}</p>
+                </div>
+                {i === 0 && (
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-[#F21C4C] text-white text-xs font-bold rounded-full">
+                    Nouveau
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Directors Collection */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold">Collections Réalisateurs</h2>
+              <p className="text-gray-500 mt-1">Explorez par vos cinéastes préférés</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {directors.map(director => (
+              <div key={director.name} className="group p-6 bg-[#121212] rounded-2xl border border-white/5 hover:border-[#F21C4C]/50 transition-all cursor-pointer hover:bg-[#1a1a1a]">
+                <div className="w-20 h-20 rounded-full bg-[#1a1a1a] mx-auto mb-4 overflow-hidden border-2 border-white/10 group-hover:border-[#F21C4C]/50 transition-colors">
+                  <img src={director.image} alt={director.name} className="w-full h-full object-cover" />
+                </div>
+                <h3 className="text-lg font-bold text-center">{director.name}</h3>
+                <p className="text-gray-500 text-sm text-center mt-1">{director.films} films</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Action & Sci-Fi */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center gap-3">
+              <Zap className="w-6 h-6 text-[#F21C4C]" />
+              Action & Science Fiction
+            </h2>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="flex gap-5 overflow-x-auto pb-4 no-scrollbar">
+            {(actionFilms.length > 0 ? actionFilms : films).map(film => (
+              <div key={film.id} className="w-[200px] flex-shrink-0">
+                <MediaCard item={film} onClick={() => navigateTo('detail', film.id)} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Drama */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center gap-3">
+              <Film className="w-6 h-6 text-[#F21C4C]" />
+              Drames Acclamés
+            </h2>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="flex gap-5 overflow-x-auto pb-4 no-scrollbar">
+            {(dramaFilms.length > 0 ? dramaFilms : films).map(film => (
+              <div key={film.id} className="w-[200px] flex-shrink-0">
+                <MediaCard item={film} onClick={() => navigateTo('detail', film.id)} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* All Films Grid */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold">Tous les Films</h2>
+            <Button variant="outline" size="sm" leftIcon={<Filter className="w-4 h-4" />}>Filtrer</Button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+            {films.map(film => (
+              <MediaCard key={film.id} item={film} onClick={() => navigateTo('detail', film.id)} />
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// Premium Series Page
+function SeriesPage() {
+  const { navigateTo } = useRouterStore();
+  const series = MOCK_CONTENT.filter(c => c.type === 'series');
+  const featuredSeries = series[0];
+  const trendingSeries = series.slice(0, 5);
+
+  // Mock collections
+  const collections = [
+    { name: 'Thrillers Addictifs', count: 24, color: '#F21C4C', image: coverTLOU },
+    { name: 'Comédies Feel-Good', count: 18, color: '#4CAF50', image: coverSuccession },
+    { name: 'Drames Familiaux', count: 15, color: '#2196F3', image: coverCyberpunk },
+    { name: 'Documentaires', count: 32, color: '#FF9800', image: coverTLOU },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#050505] pb-20">
+      {/* Hero Section with Featured Series */}
+      <div className="relative h-[75vh] overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={featuredSeries?.backdrop || coverSuccession} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-transparent" />
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-16">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="px-3 py-1 bg-[#F21C4C] text-white text-xs font-bold rounded-full uppercase">Série Originale</span>
+              <div className="flex items-center gap-1 text-yellow-400">
+                <Star className="w-4 h-4 fill-current" />
+                <span className="text-white text-sm font-bold">{featuredSeries?.rating || 9.2}</span>
+              </div>
+            </div>
+            <h1 className="text-5xl lg:text-7xl font-black mb-4">{featuredSeries?.title || 'Série à la Une'}</h1>
+            <p className="text-lg text-gray-300 mb-2">Saison 4 • 10 épisodes</p>
+            <p className="text-gray-400 mb-6 line-clamp-2">{featuredSeries?.synopsis}</p>
+            <div className="flex items-center gap-4">
+              <Button variant="primary" size="lg" leftIcon={<Play className="w-5 h-5" />} onClick={() => navigateTo('detail', featuredSeries?.id)}>
+                Reprendre S4E3
+              </Button>
+              <Button variant="glass" size="lg" leftIcon={<Info className="w-5 h-5" />}>
+                Plus d'infos
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-8 lg:px-16 space-y-16 -mt-16 relative z-10">
+        {/* Continue Watching - Series specific */}
+        <section className="bg-[#121212] rounded-3xl p-8 border border-white/5">
+          <h2 className="text-xl font-bold mb-6 flex items-center gap-3">
+            <Play className="w-5 h-5 text-[#F21C4C]" />
+            Continuer à regarder
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {series.slice(0, 3).map((s, i) => (
+              <div key={s.id} className="flex gap-4 group cursor-pointer" onClick={() => navigateTo('detail', s.id)}>
+                <div className="relative w-32 h-20 rounded-xl overflow-hidden flex-shrink-0">
+                  <img src={s.poster} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Play className="w-8 h-8 text-white" />
+                  </div>
+                  {/* Progress bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                    <div className="h-full bg-[#F21C4C]" style={{ width: `${30 + i * 25}%` }} />
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-bold truncate group-hover:text-[#F21C4C] transition-colors">{s.title}</h3>
+                  <p className="text-sm text-gray-500">S{i + 1}E{i + 3} • Il reste 35 min</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Promotional Offer */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/5">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-[#F21C4C]/30" />
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMtOS45NDEgMC0xOCA4LjA1OS0xOCAxOHM4LjA1OSAxOCAxOCAxOGM5Ljk0MSAwIDE4LTguMDU5IDE4LTE4cy04LjA1OS0xOC0xOC0xOHptMCAzMmMtNy43MzIgMC0xNC02LjI2OC0xNC0xNHM2LjI2OC0xNCAxNC0xNHMxNCA2LjI2OCAxNCAxNC02LjI2OCAxNC0xNCAxNHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjAyIi8+PC9nPjwvc3ZnPg==')] opacity-30" />
+          <div className="relative flex flex-col md:flex-row items-center gap-8 p-8 lg:p-12">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-4">
+                <Sparkles className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm font-semibold">Binge-Watch Weekend</span>
+              </div>
+              <h3 className="text-3xl font-bold mb-3">Toutes les saisons disponibles</h3>
+              <p className="text-gray-400 mb-6">Profitez de nos séries complètes pendant tout le week-end. Pas de pub, pas d'interruption.</p>
+              <Button variant="primary" size="md">Découvrir les séries</Button>
+            </div>
+            <div className="flex -space-x-4">
+              {series.slice(0, 4).map((s, i) => (
+                <div key={s.id} className="w-24 h-36 rounded-xl overflow-hidden border-2 border-[#050505] shadow-xl" style={{ transform: `rotate(${(i - 1.5) * 5}deg)` }}>
+                  <img src={s.poster} alt={s.title} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Collections */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold">Collections</h2>
+              <p className="text-gray-500 mt-1">Des sélections thématiques pour tous les goûts</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {collections.map(collection => (
+              <div key={collection.name} className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer">
+                <img src={collection.image} alt={collection.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="absolute inset-0 opacity-40" style={{ background: `linear-gradient(135deg, ${collection.color}40, transparent)` }} />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-xl font-bold">{collection.name}</h3>
+                  <p className="text-gray-400 text-sm mt-1">{collection.count} séries</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Trending */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center gap-3">
+              <Zap className="w-6 h-6 text-[#F21C4C]" />
+              Tendances cette semaine
+            </h2>
+            <Button variant="ghost" size="sm" rightIcon={<ChevronRight className="w-4 h-4" />}>Tout voir</Button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            {trendingSeries.map((s, i) => (
+              <div key={s.id} className="relative group cursor-pointer" onClick={() => navigateTo('detail', s.id)}>
+                <div className="absolute -left-4 -top-4 text-8xl font-black text-white/5 z-0 select-none">{i + 1}</div>
+                <div className="relative z-10">
+                  <MediaCard item={s} onClick={() => {}} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* All Series Grid */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold">Toutes les Séries</h2>
+            <Button variant="outline" size="sm" leftIcon={<Filter className="w-4 h-4" />}>Filtrer</Button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+            {series.map(s => (
+              <MediaCard key={s.id} item={s} onClick={() => navigateTo('detail', s.id)} />
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function GridPage({ title, filter }: { title: string, filter: ContentType }) {
   const { navigateTo } = useRouterStore();
   // Filter and then sort or shuffle could be added here to avoid seeing the same items in the same order if desired
@@ -1146,7 +2453,7 @@ function GridPage({ title, filter }: { title: string, filter: ContentType }) {
         <h1 className="text-4xl font-black tracking-tight">{title}</h1>
         <Button variant="outline" size="sm" leftIcon={<Filter className="w-4 h-4"/>}>Filtrer</Button>
       </div>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
         {data.map(item => (
           <MediaCard key={item.id} item={item} onClick={() => navigateTo('detail', item.id)} />
@@ -1205,11 +2512,30 @@ const InfiniteMarquee = ({ items, direction = 'left', speed = 30 }: { items: Con
 
 // --- ROOT APP ---
 export default function App() {
-  const { isAuthenticated } = useUserStore();
+  const { isAuthenticated, isLoading } = useUserStore();
+  const [showDesignSystem, setShowDesignSystem] = useState(false);
+
+  // Check URL hash for design-system route
+  useEffect(() => {
+    const checkHash = () => {
+      setShowDesignSystem(window.location.hash === '#/design-system');
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
+
+  // Show Design System page if URL hash matches
+  if (showDesignSystem) {
+    return <DesignSystem />;
+  }
 
   return (
     <div className="text-white bg-[#050505]">
-      {isAuthenticated ? <AppLayout /> : <LandingPage />}
+      <AnimatePresence mode="wait">
+        {isLoading && <Splashscreen key="splash" />}
+      </AnimatePresence>
+      {!isLoading && (isAuthenticated ? <AppLayout /> : <LandingPage />)}
     </div>
   );
 }
