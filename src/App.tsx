@@ -21,6 +21,7 @@ import DesignSystem from './DesignSystem';
 import coverCyberpunk from './images/cover cyberpunk.jpeg';
 import coverSuccession from './images/cover succession.jpg';
 import coverTLOU from './images/cover the last of us.webp';
+import bannerSpiderman from './images/banner spiderman.png';
 import donaSplashscreen from './images/dona_splashscreen_2x.webp';
 import donaLogoBanner from './images/dona_logo_banner_2x.webp';
 import donaLogoMacaron from './images/dona_logo_macaron_2x.webp';
@@ -188,7 +189,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'spiderman', type: 'film', title: 'Spider-Man: Across the Spider-Verse', year: 2023, duration: '2h 20m', rating: 8.6,
     synopsis: "Miles Morales est catapulté à travers le Multivers, où il rencontre une équipe de Spider-People chargée de protéger son existence.",
     poster: "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-    backdrop: "https://image.tmdb.org/t/p/w1280/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",
+    backdrop: bannerSpiderman,
     dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Action'], match: 97,
     cast: CAST_SPIDERMAN
   },
