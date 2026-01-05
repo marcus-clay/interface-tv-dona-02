@@ -131,7 +131,7 @@ export default function VideoPlayer({ content, onClose, autoPlay = true }: Video
                   </button>
                   
                   <div className="text-sm font-medium text-text-secondary ml-4">
-                    {formatDuration(12 * (progress/100))} / {content.duration}
+                    {formatDuration(12 * (progress/100))} / {'duration' in content ? content.duration : `${content.seasons} saisons`}
                   </div>
                 </div>
 
