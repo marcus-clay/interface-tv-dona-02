@@ -164,7 +164,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'oppenheimer', type: 'film', title: 'Oppenheimer', year: 2023, duration: '3h 00m', rating: 8.5,
     synopsis: "Le lieutenant-général Leslie Groves recrute le physicien J. Robert Oppenheimer pour travailler sur le projet top-secret Manhattan.",
     poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
+    backdrop: "https://image.tmdb.org/t/p/w1280/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
     dominantColor: '#D86626', badges: ['4K', 'HDR', 'Atmos'], genres: ['Drame', 'Histoire'], match: 98,
     director: "Christopher Nolan", studio: "Universal Pictures", cast: CAST_OPPENHEIMER
   },
@@ -172,7 +172,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'dune2', type: 'film', title: 'Dune: Deuxième Partie', year: 2024, duration: '2h 46m', rating: 8.8,
     synopsis: "Paul Atreides s'unit à Chani et aux Fremen pour mener la révolte contre ceux qui ont anéanti sa famille.",
     poster: "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg",
+    backdrop: "https://image.tmdb.org/t/p/w1280/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg",
     dominantColor: '#C6823F', badges: ['4K', 'Dolby Vision', 'Atmos'], genres: ['Sci-Fi', 'Aventure'], match: 99,
     director: "Denis Villeneuve", studio: "Warner Bros.", cast: CAST_DUNE2
   },
@@ -180,7 +180,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'interstellar', type: 'film', title: 'Interstellar', year: 2014, duration: '2h 49m', rating: 8.7,
     synopsis: "Une équipe d'explorateurs voyage à travers un trou de ver dans l'espace pour assurer la survie de l'humanité.",
     poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
+    backdrop: "https://image.tmdb.org/t/p/w1280/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg",
     dominantColor: '#0B1026', badges: ['4K', 'HDR'], genres: ['Sci-Fi', 'Drame'], match: 95,
     director: "Christopher Nolan", cast: CAST_INTERSTELLAR
   },
@@ -188,7 +188,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'spiderman', type: 'film', title: 'Spider-Man: Across the Spider-Verse', year: 2023, duration: '2h 20m', rating: 8.6,
     synopsis: "Miles Morales est catapulté à travers le Multivers, où il rencontre une équipe de Spider-People chargée de protéger son existence.",
     poster: "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",
+    backdrop: "https://image.tmdb.org/t/p/w1280/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg",
     dominantColor: '#F21C4C', badges: ['4K', 'HDR'], genres: ['Animation', 'Action'], match: 97,
     cast: CAST_SPIDERMAN
   },
@@ -204,7 +204,7 @@ const MOCK_CONTENT: ContentItem[] = [
     id: 'breaking-bad', type: 'series', title: 'Breaking Bad', year: 2008, duration: '5 Saisons', rating: 9.5,
     synopsis: "Walter White, professeur de chimie, se lance dans le crime pour subvenir aux besoins de sa famille.",
     poster: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-    backdrop: "https://image.tmdb.org/t/p/original/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+    backdrop: "https://image.tmdb.org/t/p/w1280/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
     dominantColor: '#1B4F25', badges: ['4K'], genres: ['Crime', 'Drame'], match: 98,
     cast: CAST_BREAKING_BAD
   },
