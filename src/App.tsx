@@ -5,7 +5,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import {
   Play, Pause, ArrowLeft, ChevronRight, Check, Monitor,
-  Loader2, Home, Search, Film, Tv, User, Info, LogOut,
+  Loader2, Info, LogOut, Search, Film, User,
   Plus, Check as CheckIcon, Smartphone, Cast, WifiOff, Star,
   Zap, ShieldCheck, CreditCard, Sparkles, X, Filter, Volume2, VolumeX, Maximize2,
   MessageCircle, ShoppingBag, Settings, Globe, ThumbsUp, Clapperboard, Share2,
@@ -13,7 +13,8 @@ import {
 } from 'lucide-react';
 import {
   Fire, FilmSlate, Moon, GlobeHemisphereWest, Trophy, Target,
-  Lightning, Medal, Heart, BookmarkSimple, Clock, TrendUp
+  Lightning, Medal, Heart, BookmarkSimple, Clock, TrendUp,
+  House, MagnifyingGlass, FilmStrip, Television, UserCircle
 } from '@phosphor-icons/react';
 import DesignSystem from './DesignSystem';
 
@@ -2030,8 +2031,9 @@ function AppLayout() {
 
   useEffect(() => setActiveTab(currentPage), [currentPage]);
 
+  // Desktop sidebar nav item
   const navItem = (id: PageView, icon: any, label: string) => (
-    <div 
+    <div
       className={cn("flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer mb-2 group", activeTab === id ? "bg-[#F21C4C] text-white font-bold shadow-lg shadow-[#F21C4C]/30" : "text-gray-400 hover:text-white hover:bg-white/5")}
       onClick={() => navigateTo(id)}
     >
@@ -2040,25 +2042,49 @@ function AppLayout() {
     </div>
   );
 
+  // iOS-style bottom tab bar item
+  const tabBarItem = (id: PageView, icon: any, label: string) => (
+    <button
+      onClick={() => navigateTo(id)}
+      className={cn(
+        "flex flex-col items-center justify-center flex-1 py-2 transition-all duration-200 tap-highlight-transparent",
+        activeTab === id ? "text-[#F21C4C]" : "text-[#8E8E93]"
+      )}
+    >
+      <div className={cn(
+        "w-7 h-7 flex items-center justify-center mb-0.5 transition-transform duration-200",
+        activeTab === id && "scale-110"
+      )}>
+        {icon}
+      </div>
+      <span className={cn(
+        "text-[10px] font-medium tracking-tight",
+        activeTab === id ? "text-[#F21C4C]" : "text-[#8E8E93]"
+      )}>
+        {label}
+      </span>
+    </button>
+  );
+
   return (
     <div className="flex h-screen bg-[#050505] text-white font-sans overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-20 lg:w-64 flex-shrink-0 flex flex-col border-r border-white/5 bg-[#050505] py-8 px-4 z-50">
+      {/* Desktop Sidebar - Hidden on mobile */}
+      <aside className="hidden md:flex w-20 lg:w-64 flex-shrink-0 flex-col border-r border-white/5 bg-[#050505] py-8 px-4 z-50">
         <div className="px-4 mb-12 cursor-pointer" onClick={() => navigateTo('browse')}>
            <img src={donaLogoBanner} alt="Dona" className="h-6 lg:h-8 object-contain" />
         </div>
-        
+
         <nav className="flex-1 space-y-2">
-          {navItem('browse', <Home className="w-5 h-5" />, "Accueil")}
-          {navItem('search', <Search className="w-5 h-5" />, "Rechercher")}
-          {navItem('movies', <Film className="w-5 h-5" />, "Films")}
-          {navItem('series', <Tv className="w-5 h-5" />, "Séries")}
-          {navItem('profile', <User className="w-5 h-5" />, "Mon Profil")}
+          {navItem('browse', <House className="w-5 h-5" />, "Accueil")}
+          {navItem('search', <MagnifyingGlass className="w-5 h-5" />, "Rechercher")}
+          {navItem('movies', <FilmStrip className="w-5 h-5" />, "Films")}
+          {navItem('series', <Television className="w-5 h-5" />, "Séries")}
+          {navItem('profile', <UserCircle className="w-5 h-5" />, "Mon Profil")}
         </nav>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 relative overflow-y-auto overflow-x-hidden bg-[#050505]">
+      <main className="flex-1 relative overflow-y-auto overflow-x-hidden bg-[#050505] pb-[calc(env(safe-area-inset-bottom)+80px)] md:pb-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
@@ -2077,6 +2103,19 @@ function AppLayout() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* iOS-style Bottom Tab Bar - Mobile only */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1C1C1E]/95 backdrop-blur-xl border-t border-white/10 safe-area-bottom">
+        <div className="flex items-stretch h-[50px]">
+          {tabBarItem('browse', <House className="w-6 h-6" weight={activeTab === 'browse' ? 'fill' : 'regular'} />, "Accueil")}
+          {tabBarItem('search', <MagnifyingGlass className="w-6 h-6" weight={activeTab === 'search' ? 'bold' : 'regular'} />, "Rechercher")}
+          {tabBarItem('movies', <FilmStrip className="w-6 h-6" weight={activeTab === 'movies' ? 'fill' : 'regular'} />, "Films")}
+          {tabBarItem('series', <Television className="w-6 h-6" weight={activeTab === 'series' ? 'fill' : 'regular'} />, "Séries")}
+          {tabBarItem('profile', <UserCircle className="w-6 h-6" weight={activeTab === 'profile' ? 'fill' : 'regular'} />, "Profil")}
+        </div>
+        {/* Safe area padding for iPhone notch */}
+        <div className="h-[env(safe-area-inset-bottom)]" />
+      </nav>
     </div>
   );
 }
@@ -2087,29 +2126,32 @@ function BrowsePage() {
   const featured = MOCK_CONTENT.find(c => c.id === 'spiderman') || MOCK_CONTENT[3]; // Spider-verse for more vibrant look
 
   return (
-    <div className="h-full overflow-y-auto no-scrollbar pb-20">
-      {/* Billboard */}
-      <div className="relative h-[75vh] w-full flex items-end pb-24 px-8 lg:px-16 overflow-hidden">
+    <div className="h-full overflow-y-auto no-scrollbar">
+      {/* Billboard - Responsive height */}
+      <div className="relative h-[65vh] md:h-[75vh] w-full flex items-end pb-16 md:pb-24 px-4 md:px-8 lg:px-16 overflow-hidden">
         <div className="absolute inset-0 z-[-1]">
           <img src={featured.backdrop} className="w-full h-full object-cover animate-slow-zoom" alt="Hero" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
         </div>
-        
+
         <div className="max-w-3xl relative z-10 animate-fade-in-up">
-           <span className="text-[#F21C4C] font-bold tracking-widest text-xs uppercase mb-4 block">N°1 aujourd'hui</span>
-           <h1 className="text-5xl lg:text-7xl font-black mb-6 leading-[0.9] drop-shadow-2xl">{featured.title}</h1>
-           <p className="text-lg text-gray-200 line-clamp-2 mb-8 max-w-xl font-medium">{featured.synopsis}</p>
-           {/* FIX: Increased gap between hero buttons */}
-           <div className="flex gap-6">
-             <Button size="xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Play className="fill-current w-6 h-6" />}>Regarder</Button>
-             <Button variant="glass" size="xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Info className="w-6 h-6" />}>Plus d'infos</Button>
+           {/* iOS-style label - SF Pro Text style */}
+           <span className="text-[#F21C4C] font-semibold tracking-wide text-[11px] md:text-xs uppercase mb-2 md:mb-4 block">N°1 aujourd'hui</span>
+           {/* iOS Large Title style - SF Pro Display */}
+           <h1 className="text-[28px] md:text-5xl lg:text-7xl font-bold md:font-black mb-3 md:mb-6 leading-[1.1] md:leading-[0.9] drop-shadow-2xl tracking-tight">{featured.title}</h1>
+           {/* iOS Body text */}
+           <p className="text-[15px] md:text-lg text-gray-200 line-clamp-2 mb-5 md:mb-8 max-w-xl font-normal md:font-medium leading-relaxed">{featured.synopsis}</p>
+           {/* Buttons - iOS style */}
+           <div className="flex gap-3 md:gap-6">
+             <Button size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Play className="fill-current w-5 h-5 md:w-6 md:h-6" />}>Regarder</Button>
+             <Button variant="glass" size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Info className="w-5 h-5 md:w-6 md:h-6" />}>Plus d'infos</Button>
            </div>
         </div>
       </div>
 
-      {/* Rails */}
-      <div className="px-8 lg:px-16 space-y-16 -mt-10 relative z-10">
+      {/* Rails - iOS style spacing */}
+      <div className="px-4 md:px-8 lg:px-16 space-y-8 md:space-y-16 -mt-6 md:-mt-10 relative z-10 pb-8">
         <ContentRail title="Tendances actuelles" data={MOCK_CONTENT} />
         <ContentRail title="Films primés" data={[...MOCK_CONTENT].reverse()} />
         <ContentRail title="Séries à binger" data={MOCK_CONTENT.filter(c => c.type === 'series')} />
@@ -2469,14 +2511,18 @@ const ContentRail = ({ title, data }: { title: string, data: ContentItem[] }) =>
   const { navigateTo } = useRouterStore();
   return (
     <section>
-      <div className="flex justify-between items-end mb-6">
-        <h2 className="text-xl font-bold text-white group cursor-pointer flex items-center gap-2">
-          {title} <ChevronRight className="w-5 h-5 text-[#F21C4C] opacity-0 group-hover:opacity-100 transition-all transform -translate-x-2 group-hover:translate-x-0" />
+      {/* iOS-style section header */}
+      <div className="flex justify-between items-center mb-3 md:mb-6">
+        <h2 className="text-[17px] md:text-xl font-semibold md:font-bold text-white group cursor-pointer flex items-center gap-2 tracking-tight">
+          {title}
+          <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[#F21C4C] opacity-0 group-hover:opacity-100 transition-all transform -translate-x-2 group-hover:translate-x-0" />
         </h2>
+        <span className="text-[15px] text-[#F21C4C] font-medium md:hidden">Tout voir</span>
       </div>
-      <div className="flex gap-5 overflow-x-auto pb-8 no-scrollbar scroll-smooth snap-x">
+      {/* Horizontal scroll - iOS momentum scrolling */}
+      <div className="flex gap-3 md:gap-5 overflow-x-auto pb-4 md:pb-8 no-scrollbar scroll-smooth snap-x -mx-4 px-4 md:mx-0 md:px-0">
         {data.map((item) => (
-          <div key={item.id} className="w-[220px] flex-shrink-0 snap-start">
+          <div key={item.id} className="w-[140px] md:w-[220px] flex-shrink-0 snap-start">
             <MediaCard item={item} onClick={() => navigateTo('detail', item.id)} />
           </div>
         ))}
