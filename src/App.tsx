@@ -22,7 +22,7 @@ import DesignSystem from './DesignSystem';
 import coverCyberpunk from './images/cover cyberpunk.jpeg';
 import coverSuccession from './images/cover succession.jpg';
 import coverTLOU from './images/cover the last of us.webp';
-import bannerSpiderman from './images/banner spiderman.png';
+import bannerSpiderman from './images/banner-spiderman.png';
 import donaSplashscreen from './images/dona_splashscreen_2x.webp';
 import donaLogoBanner from './images/dona_logo_banner_2x.webp';
 import donaLogoMacaron from './images/dona_logo_macaron_2x.webp';
@@ -2128,25 +2128,35 @@ function BrowsePage() {
   return (
     <div className="h-full overflow-y-auto no-scrollbar">
       {/* Billboard - Responsive height */}
-      <div className="relative h-[65vh] md:h-[75vh] w-full flex items-end pb-16 md:pb-24 px-4 md:px-8 lg:px-16 overflow-hidden">
-        <div className="absolute inset-0 z-[-1]">
-          <img src={featured.backdrop} className="w-full h-full object-cover animate-slow-zoom" alt="Hero" />
+      <div className="relative h-[65vh] md:h-[75vh] w-full overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0">
+          <img
+            src={featured.backdrop}
+            className="w-full h-full object-cover"
+            alt={featured.title}
+            loading="eager"
+          />
+          {/* Gradient overlays */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/50 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
         </div>
 
-        <div className="max-w-3xl relative z-10 animate-fade-in-up">
-           {/* iOS-style label - SF Pro Text style */}
-           <span className="text-[#F21C4C] font-semibold tracking-wide text-[11px] md:text-xs uppercase mb-2 md:mb-4 block">N°1 aujourd'hui</span>
-           {/* iOS Large Title style - SF Pro Display */}
-           <h1 className="text-[28px] md:text-5xl lg:text-7xl font-bold md:font-black mb-3 md:mb-6 leading-[1.1] md:leading-[0.9] drop-shadow-2xl tracking-tight">{featured.title}</h1>
-           {/* iOS Body text */}
-           <p className="text-[15px] md:text-lg text-gray-200 line-clamp-2 mb-5 md:mb-8 max-w-xl font-normal md:font-medium leading-relaxed">{featured.synopsis}</p>
-           {/* Buttons - iOS style */}
-           <div className="flex gap-3 md:gap-6">
-             <Button size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Play className="fill-current w-5 h-5 md:w-6 md:h-6" />}>Regarder</Button>
-             <Button variant="glass" size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Info className="w-5 h-5 md:w-6 md:h-6" />}>Plus d'infos</Button>
-           </div>
+        {/* Content Layer */}
+        <div className="absolute inset-0 flex items-end pb-16 md:pb-24 px-4 md:px-8 lg:px-16">
+          <div className="max-w-3xl relative z-10">
+             {/* iOS-style label - SF Pro Text style */}
+             <span className="text-[#F21C4C] font-semibold tracking-wide text-[11px] md:text-xs uppercase mb-2 md:mb-4 block">N°1 aujourd'hui</span>
+             {/* iOS Large Title style - SF Pro Display */}
+             <h1 className="text-[28px] md:text-5xl lg:text-7xl font-bold md:font-black mb-3 md:mb-6 leading-[1.1] md:leading-[0.9] drop-shadow-2xl tracking-tight">{featured.title}</h1>
+             {/* iOS Body text */}
+             <p className="text-[15px] md:text-lg text-gray-200 line-clamp-2 mb-5 md:mb-8 max-w-xl font-normal md:font-medium leading-relaxed">{featured.synopsis}</p>
+             {/* Buttons - iOS style */}
+             <div className="flex gap-3 md:gap-6">
+               <Button size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Play className="fill-current w-5 h-5 md:w-6 md:h-6" />}>Regarder</Button>
+               <Button variant="glass" size="lg" className="md:!px-10 md:!py-5 md:!text-xl" onClick={() => navigateTo('detail', featured.id)} leftIcon={<Info className="w-5 h-5 md:w-6 md:h-6" />}>Plus d'infos</Button>
+             </div>
+          </div>
         </div>
       </div>
 
